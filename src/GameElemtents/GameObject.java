@@ -9,7 +9,6 @@ import javafx.scene.Node;
 public abstract class GameObject {
 	//for a brick, it is a rectangle,for a Ball, it is a circle, for 
 	//a paddle, this is a rectangle
-	private Paint color;
 	//the type is node because node is the superclass for all 
 	//javafx objects.
     protected Node view; //javafx node representing this object
