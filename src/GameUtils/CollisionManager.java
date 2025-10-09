@@ -1,6 +1,11 @@
+package GameUtils;
 
 import java.util.Iterator;
 import java.util.List;
+
+import GameElemtents.Ball;
+import GameElemtents.Brick;
+import GameElemtents.Paddle;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 

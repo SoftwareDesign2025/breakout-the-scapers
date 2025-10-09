@@ -1,11 +1,12 @@
 
+import GameUtils.BreakoutController;
+import GameUtils.GameColors;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -13,15 +14,15 @@ import javafx.util.Duration;
 public class Main extends Application{
 	//for animations and window
 	public static final int WIDTH = 600;
-  public static final int HEIGHT = 800;
-  public static final int FRAMES_PER_SECOND = 60;
-  public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-  public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+	public static final int HEIGHT = 800;
+	public static final int FRAMES_PER_SECOND = 60;
+	public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+	public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     //for window appearance
-  public static final String TITLE = "Breakout Game";
-  public static final Paint BACKGROUND = GameColors.BACKGROUND.getColor();
+	public static final String TITLE = "Breakout Game";
+	public static final Paint BACKGROUND = GameColors.BACKGROUND.getColor();
     
-  public static final int SIZE = 400;
+	public static final int SIZE = 400;
 
     //game state
     private Scene myScene;
@@ -50,18 +51,27 @@ public class Main extends Application{
         Group root = myController.createRoot(width, height);
         Scene scene = new Scene(root, width, height, background);
 
-        //for arrow key presses to move the paddle
-        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        // key press sets movement flags to true
+        scene.setOnKeyPressed(e -> {
+            switch (e.getCode()) {
+                case LEFT -> myController.setMoveLeft(true);
+                case RIGHT -> myController.setMoveRight(true);
+                default -> {} // ignore other keys
+            }
+        });
+
+        // key release sets movement flags to false
+        scene.setOnKeyReleased(e -> {
+            switch (e.getCode()) {
+                case LEFT -> myController.setMoveLeft(false);
+                case RIGHT -> myController.setMoveRight(false);
+                default -> {}
+            }
+        });
+
         return scene;
     }
 
-    private void handleKeyInput(KeyCode code) {
-        switch (code) {
-            case LEFT -> myController.movePaddle(false);
-            case RIGHT -> myController.movePaddle(true);
-            default -> {} //ignore other keys
-        }
-    }
 
 	/**
 	 * Start the program.
