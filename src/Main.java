@@ -13,13 +13,15 @@ import javafx.util.Duration;
 public class Main extends Application{
 	//for animations and window
 	public static final int WIDTH = 600;
-    public static final int HEIGHT = 800;
-    public static final int FRAMES_PER_SECOND = 60;
-    public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+  public static final int HEIGHT = 800;
+  public static final int FRAMES_PER_SECOND = 60;
+  public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+  public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     //for window appearance
-    public static final String TITLE = "Breakout Game";
-    public static final Paint BACKGROUND = Color.BLACK;
+  public static final String TITLE = "Breakout Game";
+  public static final Paint BACKGROUND = GameColors.BACKGROUND.getColor();
+    
+  public static final int SIZE = 400;
 
     //game state
     private Scene myScene;
@@ -61,8 +63,10 @@ public class Main extends Application{
         }
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
+	/**
+	 * Start the program.
+	 */
+	public static void main(String[] args) {
+		launch(args);
+	}
 }
