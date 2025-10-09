@@ -1,62 +1,62 @@
 package GameElemtents;
-import GameUtils.GameColors;
+
+
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
+//represents the moving ball in the game
+public class Ball extends GameObject{
+	private Point2D velocity;
 
-/**
- * Simple ball bouncing around
- *
- * @author Jose Besednjak
- */
-public class Ball {
-    public static final int BAll_SPEED = 250;
-    public static final int BALL_SIZE = 15;
-
-    private Circle myBouncyBall;
-    private Point2D myVelocity = new Point2D(BAll_SPEED,BAll_SPEED-5);
-
-
-    /**
-     * Create a bouncy ball
-     */
-    public Ball (int screenWidth, int screenHeight) {
-        myBouncyBall = new Circle();
-        myBouncyBall.setCenterX(screenWidth/2);
-        myBouncyBall.setCenterY(screenHeight/2);
-        myBouncyBall.setRadius(BALL_SIZE);
-        myBouncyBall.setFill(GameColors.SECONDARY_COLOR.getColor());
+	//constructor for a ball with position, radius, and color
+    public Ball(double x, double y, double radius, Paint color) {
+        view = new Circle(x, y, radius, color);
+        velocity = new Point2D(150, 150); //set initial velocity
     }
 
-    /**
-     * Move by taking one step based on its velocity.
-     * Note, elapsedTime is used to ensure consistent speed across different machines.
-     */
-    public void move (double elapsedTime) {
-        myBouncyBall.setCenterX(myBouncyBall.getCenterX() + myVelocity.getX() * elapsedTime);
-        myBouncyBall.setCenterY(myBouncyBall.getCenterY() + myVelocity.getY() * elapsedTime);
+    //update ball position based on velocity and elapsed time
+    @Override
+    public void update(double elapsedTime) {
+        move(elapsedTime);
     }
 
-    /**
-     * Bounce off the walls represented by the edges of the screen.
-     * Notice we need to consider the radious now to see if its out of it
-     */
-    public void bounce(double screenWidth, double screenHeight) {
-        double radius = myBouncyBall.getRadius();
+    public void move(double elapsedTime) {
+        Circle c = (Circle) view;
+        c.setCenterX(c.getCenterX() + velocity.getX() * elapsedTime);
+        c.setCenterY(c.getCenterY() + velocity.getY() * elapsedTime);
 
-        if (myBouncyBall.getCenterX() - radius < 0 || myBouncyBall.getCenterX() + radius > screenWidth) {
-            myVelocity = new Point2D(-myVelocity.getX(), myVelocity.getY());
+        // bounce off left/right walls
+        if (c.getCenterX() <= c.getRadius() || c.getCenterX() >= 600 - c.getRadius()) {
+            velocity = new Point2D(-velocity.getX(), velocity.getY());
         }
-        if (myBouncyBall.getCenterY() - radius < 0 || myBouncyBall.getCenterY() + radius > screenHeight) {
-            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+
+        // bounce off top
+        if (c.getCenterY() <= c.getRadius()) {
+            velocity = new Point2D(velocity.getX(), -velocity.getY());
         }
     }
 
-    /**
-     * Returns internal view of bouncer to interact with other JavaFX methods.
-     */
-    public Node getView () {
-        return myBouncyBall;
+    public void bounceVertical() {
+        velocity = new Point2D(velocity.getX(), -velocity.getY());
     }
+
+    public void bounceHorizontal() {
+        velocity = new Point2D(-velocity.getX(), velocity.getY());
+    }
+
+    public void reset(double x, double y) {
+        ((Circle) view).setCenterX(x);
+        ((Circle) view).setCenterY(y);
+        velocity = new Point2D(150, 150);
+    }
+    
+    public double getX() {
+        return ((Circle) view).getCenterX();
+    }
+
+    public double getY() {
+        return ((Circle) view).getCenterY();
+    }
+
 }
