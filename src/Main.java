@@ -1,74 +1,67 @@
-import java.awt.*;
 
-import GameElemtents.Ball;
-import GameUtils.GameColors;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Main extends Application {
+public class Main extends Application{
+	//for animations and window
+	public static final int WIDTH = 600;
+  public static final int HEIGHT = 800;
+  public static final int FRAMES_PER_SECOND = 60;
+  public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+  public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+    //for window appearance
+  public static final String TITLE = "Breakout Game";
+  public static final Paint BACKGROUND = GameColors.BACKGROUND.getColor();
+    
+  public static final int SIZE = 400;
 
-	public static final int SIZE = 400;
-	public static final int FRAMES_PER_SECOND = 60;
-	public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-	public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-	public static final String TITLE = "Example JavaFX";
-    public static final Paint BACKGROUND = GameColors.BACKGROUND.getColor();
+    //game state
+    private Scene myScene;
+    private BreakoutController myController;
 
-	private Scene myScene;
-	private Group root;
-	private Ball ball;
+    @Override
+    public void start(Stage stage) {
+        myController = new BreakoutController();
+        myScene = setupScene(WIDTH, HEIGHT, BACKGROUND);
+        stage.setScene(myScene);
+        stage.setTitle(TITLE);
+        stage.show();
 
-	/**
-	 * Initialize what will be displayed and how it will be updated.
-	 */
-	@Override
-	public void start(Stage stage) {
-		root = new Group();
+        //game loop
+        //KeyFrame calls step() repeatedly at a constant time interval
+        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+                e -> myController.step(SECOND_DELAY));
+        Timeline animation = new Timeline();
+        animation.setCycleCount(Timeline.INDEFINITE);// loop forever
+        animation.getKeyFrames().add(frame);
+        animation.play();
+    }
 
-		// Create the ball and add it to the scene graph
-		ball = new Ball(SIZE, SIZE);
-		root.getChildren().add(ball.getView());
+    //create the scene and connects keyboard input to paddle movement
+    private Scene setupScene(int width, int height, Paint background) {
+        Group root = myController.createRoot(width, height);
+        Scene scene = new Scene(root, width, height, background);
 
-		// Create scene with root group
-		myScene = new Scene(root, SIZE, SIZE, BACKGROUND);
+        //for arrow key presses to move the paddle
+        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        return scene;
+    }
 
-		// Set up and show stage
-		stage.setScene(myScene);
-		stage.setTitle(TITLE);
-		stage.show();
-
-		// Setup animation timeline
-		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-		Timeline animation = new Timeline();
-		animation.setCycleCount(Timeline.INDEFINITE);
-		animation.getKeyFrames().add(frame);
-		animation.play();
-
-		// I do not know what this is but seems important for the future
-		myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-		myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
-	}
-
-	// This method is called every frame to update the ball's position and bounce it
-	private void step(double elapsedTime) {
-		ball.move(elapsedTime);
-		ball.bounce(SIZE, SIZE);
-	}
-
-	private void handleKeyInput(KeyCode code) {
-		// TODO
-	}
-
-	private void handleMouseInput(double x, double y) {
-		// TODO
-	}
+    private void handleKeyInput(KeyCode code) {
+        switch (code) {
+            case LEFT -> myController.movePaddle(false);
+            case RIGHT -> myController.movePaddle(true);
+            default -> {} //ignore other keys
+        }
+    }
 
 	/**
 	 * Start the program.
