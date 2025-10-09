@@ -48,6 +48,12 @@ public void setDirection(double angleDegrees){
         // bounce off left/right walls
         if (c.getCenterX() <= c.getRadius() || c.getCenterX() >= 600 - c.getRadius()) {
             velocity = new Point2D(-velocity.getX(), velocity.getY());
+            if (c.getCenterX() <= c.getRadius() ) {
+            	c.setCenterX(c.getRadius());
+            }
+            else {
+            	c.setCenterX(600 - c.getRadius());
+            }
         }
 
         // bounce off top
