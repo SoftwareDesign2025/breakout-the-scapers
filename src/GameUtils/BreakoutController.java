@@ -13,7 +13,8 @@ import javafx.scene.text.Text;
 
 public class BreakoutController {
 	private final Paint PADDLE_COLOR = GameColors.PRIMARY_COLOR.getColor();
-    public static final int PADDLE_SPEED = 10;
+    public final int PADDLE_SPEED = 10;
+    public final int PADDLE_SIZE = 150;
     
     private final Paint BALL_COLOR = GameColors.ACCENT_COLOR.getColor();
     public final int BALL_RADIUS = 10;
@@ -42,7 +43,7 @@ public class BreakoutController {
         height = windowHeight;
 
         Group root = new Group();
-        paddle = new Paddle(width / 2 - 50, height - 50, 100, 15, PADDLE_COLOR);
+        paddle = new Paddle(width / 2 - 50, height - 50, PADDLE_SIZE, 15, PADDLE_COLOR);
      
         //create ball at the center of screen
         ball = new Ball(width / 2, height / 2, BALL_RADIUS, BALL_COLOR);

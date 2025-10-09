@@ -9,8 +9,8 @@ import javafx.scene.shape.Circle;
 public class Ball extends GameObject{
 	// keeps track of current angle
 	private double angleDegrees = 45;
-    final double DEFAULT_ANGLE = 45;
-	private double speed = 500;
+    final double DEFAULT_ANGLE = 360-90;
+	private double speed = 700;
 	private Point2D velocity;
 	
 public void setDirection(double angleDegrees){
@@ -31,7 +31,7 @@ public void setDirection(double angleDegrees){
 	//constructor for a ball with position, radius, and color
     public Ball(double x, double y, double radius, Paint color) {
         view = new Circle(x, y, radius, color);
-        setDirection(45);
+        setDirection(DEFAULT_ANGLE);
     }
 
     //update ball position based on velocity and elapsed time
