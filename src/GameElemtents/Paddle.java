@@ -2,8 +2,10 @@ package GameElemtents;
 
 
 import GameUtils.GameColors;
+import javafx.geometry.Bounds;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Window;
 
 //represents the paddle controlled by the player
 //paddle can only move left and right
@@ -11,6 +13,8 @@ public class Paddle extends GameObject{
 	private double speed = 800;
 	private boolean moveLeft = false;
 	private boolean moveRight = false;
+	private boolean outOfBoundsLeft = false;
+	private boolean outOfBoundsRight = false;
 	
 	
     public Paddle(double x, double y, double width, double height, Paint color) {
@@ -21,18 +25,31 @@ public class Paddle extends GameObject{
 
     @Override
     public void update(double elapsedTime) {
-    	
-    	if (moveLeft) {
+    	checkOutOfBounds();
+    	if (moveLeft && !outOfBoundsLeft) {
     		// move left lol
     		moveHorizontal(elapsedTime, -1);
     	}
-    	if (moveRight) {
+    	if (moveRight && !outOfBoundsRight) {
     		// move right
     		moveHorizontal(elapsedTime, 1);
     	}
     }
     
-    private void moveHorizontal(double elapsedTime, int directionalMultiplier) {
+    private void checkOutOfBounds() {
+        Bounds viewBounds = view.localToScreen(view.getBoundsInLocal());
+        Window window = view.getScene().getWindow();
+
+        double windowMinX = window.getX();
+        double windowMaxX = windowMinX + window.getWidth();
+
+        // Check if the view is outside the horizontal window bounds
+        outOfBoundsLeft = viewBounds.getMinX() < windowMinX;
+        outOfBoundsRight = viewBounds.getMaxX() > windowMaxX;
+    }
+
+
+	private void moveHorizontal(double elapsedTime, int directionalMultiplier) {
     	// Ensures smooth movement
     	view.setLayoutX(view.getLayoutX() + ( speed * directionalMultiplier * elapsedTime) ) ;
     }
