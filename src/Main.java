@@ -1,11 +1,15 @@
 
+import java.io.IOException;
+
 import GameUtils.BreakoutController;
 import GameUtils.GameColors;
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -29,20 +33,26 @@ public class Main extends Application{
 
     @Override
     public void start(Stage stage) {
-        myController = new BreakoutController();
+        myController = new BreakoutController(); //
         myScene = setupScene(WIDTH, HEIGHT, BACKGROUND);
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
-
+        
+ 
         //game loop
         //KeyFrame calls step() repeatedly at a constant time interval
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
                 e -> myController.step(SECOND_DELAY));
-        Timeline animation = new Timeline();
+        
+        Timeline animation = new Timeline(); 
+        
         animation.setCycleCount(Timeline.INDEFINITE);// loop forever
         animation.getKeyFrames().add(frame);
         animation.play();
+        
+        
+        myController.setAnimation(animation);
     }
 
     //create the scene and connects keyboard input to paddle movement
