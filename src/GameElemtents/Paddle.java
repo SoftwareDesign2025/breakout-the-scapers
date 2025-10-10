@@ -1,7 +1,6 @@
 package GameElemtents;
 
 
-import GameUtils.GameColors;
 import javafx.geometry.Bounds;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
