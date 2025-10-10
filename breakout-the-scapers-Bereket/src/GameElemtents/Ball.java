@@ -7,12 +7,31 @@ import javafx.scene.shape.Circle;
 
 //represents the moving ball in the game
 public class Ball extends GameObject{
+	// keeps track of current angle
+	private double angleDegrees = 45;
+    final double DEFAULT_ANGLE = 360-90;
+	private double speed = 700;
 	private Point2D velocity;
+	
+public void setDirection(double angleDegrees){
+		this.angleDegrees = angleDegrees;
+		// to get the velocity in x we do cosine of angle * speed
+		// cosine means how horizontal something is so x axis
+		double x = Math.cos(Math.toRadians(angleDegrees))* speed;
+		
+		// to get the velocity in the y direction we use sin instead
+		// sine means how vertical something is
+		double y = Math.sin(Math.toRadians(angleDegrees))* speed;
+//		System.out.println("X:" + x + " Y:" + y);
+		
+		// now that we have our x and y velocities we can update the velocity vector
+		velocity = new Point2D(x,y);
+	}
 
 	//constructor for a ball with position, radius, and color
     public Ball(double x, double y, double radius, Paint color) {
         view = new Circle(x, y, radius, color);
-        velocity = new Point2D(150, 150); //set initial velocity
+        setDirection(DEFAULT_ANGLE);
     }
 
     //update ball position based on velocity and elapsed time
@@ -29,6 +48,12 @@ public class Ball extends GameObject{
         // bounce off left/right walls
         if (c.getCenterX() <= c.getRadius() || c.getCenterX() >= 600 - c.getRadius()) {
             velocity = new Point2D(-velocity.getX(), velocity.getY());
+            if (c.getCenterX() <= c.getRadius() ) {
+            	c.setCenterX(c.getRadius());
+            }
+            else {
+            	c.setCenterX(600 - c.getRadius());
+            }
         }
 
         // bounce off top
@@ -48,7 +73,7 @@ public class Ball extends GameObject{
     public void reset(double x, double y) {
         ((Circle) view).setCenterX(x);
         ((Circle) view).setCenterY(y);
-        velocity = new Point2D(150, 150);
+        setDirection(this.DEFAULT_ANGLE);
     }
     
     public double getX() {
@@ -57,6 +82,12 @@ public class Ball extends GameObject{
 
     public double getY() {
         return ((Circle) view).getCenterY();
+    }
+    
+    public void updateSpeed(double newSpeed) {
+    	this.speed = newSpeed; // set new speed
+    	// update velocity vector continuing with current angle
+    	setDirection(this.angleDegrees);
     }
 
 }

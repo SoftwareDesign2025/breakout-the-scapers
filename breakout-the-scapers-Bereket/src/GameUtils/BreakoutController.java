@@ -1,5 +1,6 @@
 package GameUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +19,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import jdk.incubator.vector.VectorOperators.Test;
+import GameElemtents.PowerUps;
 
 
-public class BreakoutController {
+public class BreakoutController extends Scoring{
 	private final Paint PADDLE_COLOR = GameColors.PRIMARY_COLOR.getColor();
     public static final int PADDLE_SPEED = 10;
     
@@ -41,12 +44,18 @@ public class BreakoutController {
     private int lives;
     private Text scoreLabel;
     private Text livesLabel;
-
+    
+    private Text highScoreText;
+    
     private double width;
     private double height;
     
     private Timeline animation;
 
+    
+    
+    private List<PowerUps> powerUps = new ArrayList<>();
+    private Group root;
     
     public void setAnimation(Timeline animation) {
         this.animation = animation;
@@ -58,7 +67,7 @@ public class BreakoutController {
         width = windowWidth;
         height = windowHeight;
 
-        Group root = new Group();
+        root = new Group();
         paddle = new Paddle(width / 2 - 50, height - 50, 100, 15, PADDLE_COLOR);
      
         //create ball at the center of screen
@@ -68,9 +77,27 @@ public class BreakoutController {
         bricks = new ArrayList<>();
         collisionManager = new CollisionManager();
 
-        //create a simple row of bricks
+        // toDo for later make this into a method and call that 3 times
+        
+      //create a simple row of bricks
         for (int i = 0; i < 10; i++) {
             Brick brick = new Brick(50 + i * 50, 100, 40, 20, BRICK_COLOR, 1);
+            bricks.add(brick);
+            //add visual node to scene
+            root.getChildren().add(brick.getView());
+        }
+        
+      //create a simple row of bricks
+        for (int i = 0; i < 10; i++) {
+            Brick brick = new Brick(50 + i * 50, 150, 40, 20, BRICK_COLOR, 1);
+            bricks.add(brick);
+            //add visual node to scene
+            root.getChildren().add(brick.getView());
+        }
+        
+      //create a simple row of bricks
+        for (int i = 0; i < 10; i++) {
+            Brick brick = new Brick(50 + i * 50, 200, 40, 20, BRICK_COLOR, 1);
             bricks.add(brick);
             //add visual node to scene
             root.getChildren().add(brick.getView());
@@ -83,6 +110,9 @@ public class BreakoutController {
         scoreLabel.setFill(Color.BLACK);
         livesLabel = new Text(500, 20, "Lives: " + lives);
         livesLabel.setFill(Color.BLACK);
+        
+//        highScoreText = new Text(20,20, "High Score: " + readLastNumberFromFile());
+//        highScoreText.setFill(Color.BLACK);
 
         //add visual components to root group
         root.getChildren().addAll(paddle.getView(), ball.getView(), scoreLabel, livesLabel);
@@ -91,8 +121,9 @@ public class BreakoutController {
     
     
 
- 
+    // makes the stage that shows the player the game has been won 
     private void win_game() {
+    	System.out.println(readLastNumberFromFile());
         try {
             if (animation != null) {
                 animation.stop(); // Stop the game loop
@@ -106,17 +137,27 @@ public class BreakoutController {
             	showScore.setText("Final Score: " + score);
             }
             
+            
+            Label oldScoreLabel = (Label) root.lookup("#prevHigh");
+            
+            if (score > readLastNumberFromFile()) {
+            	checkHighScore(score);
+            	oldScoreLabel.setText("High Score is: " + score);
+            }
+            
+            
             Stage stage = (Stage) scoreLabel.getScene().getWindow();
             Scene scene = new Scene(root, 600, 800);
             stage.setScene(scene);
             stage.show();
-
+            System.out.println(readLastNumberFromFile());
             Button exitButton = (Button) root.lookup("#exitButton");
             exitButton.setOnAction(e -> stage.close());
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
 
     }
 
@@ -150,6 +191,9 @@ public class BreakoutController {
     
     public void step(double elapsedTime) {
     	//move the ball based on its velocity and the elapsed frame time
+    	
+    	
+    	
         ball.move(elapsedTime);
         paddle.update(elapsedTime);
         //collisions with ball paddle/bricks
@@ -175,6 +219,8 @@ public class BreakoutController {
 
         scoreLabel.setText("Score: " + score);
         livesLabel.setText("Lives: " + lives);
+        
+        
     }
 
     public void addScore(int points) {

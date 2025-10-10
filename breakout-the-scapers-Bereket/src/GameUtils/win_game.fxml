@@ -3,10 +3,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
+<!-- This is the xml for our win screen where we give some more information to the player  -->
+
+<!-- mostly high score logic -->
+
 
 <VBox alignment="CENTER" spacing="20" xmlns:fx="http://javafx.com/fxml" fx:controller="GameUtils.BreakoutController">
     <Label text="Congratulations You Win!!" style="-fx-font-size: 36px; -fx-text-fill: green;" />
 	 <Label fx:id="scoreLabel" text="Score: 0" style="-fx-font-size: 20px;" />
+	 <Label fx:id= "prevHigh" text="old high score: 0" style="-fx-font-size: 20px;"/>
 	 <Button text="Exit" fx:id="exitButton" />
 </VBox>
 

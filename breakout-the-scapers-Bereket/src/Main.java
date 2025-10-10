@@ -1,4 +1,6 @@
 
+import java.io.IOException;
+
 import GameUtils.BreakoutController;
 import GameUtils.GameColors;
 import javafx.animation.AnimationTimer;
