@@ -36,7 +36,7 @@ public class Main extends Application{
         myController = new BreakoutController(); //
         myScene = setupScene(WIDTH, HEIGHT, BACKGROUND);
         stage.setScene(myScene);
-        stage.setTitle(TITLE);
+        stage.setTitle(TITLE); 
         stage.show();
         
  

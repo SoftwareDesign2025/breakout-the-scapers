@@ -92,7 +92,7 @@ public class BreakoutController extends Scoring{
             Brick brick = new Brick(50 + i * 50, 150, 40, 20, BRICK_COLOR, 1);
             bricks.add(brick);
             //add visual node to scene
-            root.getChildren().add(brick.getView());
+            root.getChildren().add(brick.getView());//
         }
         
       //create a simple row of bricks

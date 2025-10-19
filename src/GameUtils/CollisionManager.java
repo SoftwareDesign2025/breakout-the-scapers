@@ -11,7 +11,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 //keeps the physics and scoring logic separate from the controller
-public class CollisionManager {
+public class CollisionManager { 
 	
 	//checks if the ball hits the paddle, and makes it bounce upward proportionally on how much
 	// to the right is with respect to the paddle Warning, there is a lot of math on this

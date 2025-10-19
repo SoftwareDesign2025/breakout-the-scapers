@@ -10,7 +10,7 @@ public class Scoring {
     // Get the last number in the file (returns 0 if file missing or empty)
     public int readLastNumberFromFile() {
         try {
-            if (Files.notExists(FILE_PATH)) {
+            if (Files.notExists(FILE_PATH)) { 
                 Files.createFile(FILE_PATH);
                 Files.writeString(FILE_PATH, "0\n");
                 return 0;
