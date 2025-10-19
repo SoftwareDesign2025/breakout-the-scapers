@@ -16,7 +16,7 @@ public class Brick extends GameObject{
     //makes a new brick at the given location and color
     public Brick(double x, double y, double width, double height, Paint color, int hp) {
         this.hp = hp;
-        this.points = 200; 
+        this.points = 100; 
         //makes a rectangle to visually represent the brick
         view = new Rectangle(x, y, width, height);
         ((Rectangle) view).setFill(color);
