@@ -95,14 +95,13 @@ public class Brick extends GameObject{
     }
     
     @Override
-    public boolean collideWithBall(Ball ball, BreakoutController controller) {
+    public boolean collideWithBall(Ball ball) {
     	Circle b = (Circle) ball.getView();
     	
     	if (b.getBoundsInParent().intersects(this.getView().getBoundsInParent())) {
             this.bounceBall(ball);; // bounce off the brick surface
             //onHit() reduces HP, returns true if brick is destroyed
             if (this.onHit()) {
-                controller.addScore(this.getPoints());
                 this.deadBrick();
             }
             return true;

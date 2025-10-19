@@ -75,7 +75,6 @@ public class BreakoutController extends Scoring{
         
         //create bricks
         bricks = new ArrayList<>();
-        collisionManager = new CollisionManager();
 
         // toDo for later make this into a method and call that 3 times
         
@@ -194,12 +193,11 @@ public class BreakoutController extends Scoring{
     	
     	
     	
-        ball.move(elapsedTime);
+        ball.update(elapsedTime);
         paddle.update(elapsedTime);
         //collisions with ball paddle/bricks
-        collisionManager.handleBallPaddle(ball, paddle);
-        collisionManager.handleBallBricks(ball, bricks, this);
-        
+        CollisionManager.handleBallPaddle(ball, paddle);
+        CollisionManager.handleBallBricks(ball, bricks, this);
         
         if (bricks.isEmpty()) {
         	win_game();

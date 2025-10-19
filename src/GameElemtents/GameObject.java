@@ -20,7 +20,7 @@ public abstract class GameObject {
 
     public abstract void update(double elapsedTime);
     
-    public boolean collideWithBall(Ball ball, BreakoutController controller) {
+    public boolean collideWithBall(Ball ball) {
     	// method stub, does nothing by default
     	// override depending on how you want to handle interactions
     	//

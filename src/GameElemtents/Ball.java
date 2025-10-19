@@ -37,11 +37,7 @@ public void setDirection(double angleDegrees){
     //update ball position based on velocity and elapsed time
     @Override
     public void update(double elapsedTime) {
-        move(elapsedTime);
-    }
-
-    public void move(double elapsedTime) {
-        Circle c = (Circle) view;
+    	Circle c = (Circle) view;
         c.setCenterX(c.getCenterX() + velocity.getX() * elapsedTime);
         c.setCenterY(c.getCenterY() + velocity.getY() * elapsedTime);
 
@@ -61,6 +57,7 @@ public void setDirection(double angleDegrees){
             velocity = new Point2D(velocity.getX(), -velocity.getY());
         }
     }
+
 
     public void bounceVertical() {
         velocity = new Point2D(velocity.getX(), -velocity.getY());
@@ -93,5 +90,7 @@ public void setDirection(double angleDegrees){
     	// update velocity vector continuing with current angle
     	setDirection(this.angleDegrees);
     }
+    
+    
 
 }
