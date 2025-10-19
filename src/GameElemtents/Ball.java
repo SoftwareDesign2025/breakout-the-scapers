@@ -84,6 +84,10 @@ public void setDirection(double angleDegrees){
         return ((Circle) view).getCenterY();
     }
     
+    public Point2D getVelocity() {
+    	return this.velocity;
+    }
+    
     public void updateSpeed(double newSpeed) {
     	this.speed = newSpeed; // set new speed
     	// update velocity vector continuing with current angle

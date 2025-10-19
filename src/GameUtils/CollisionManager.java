@@ -56,19 +56,11 @@ public class CollisionManager {
     public void handleBallBricks(Ball ball, List<Brick> bricks, BreakoutController controller) {
         Circle b = (Circle) ball.getView();
         Iterator<Brick> it = bricks.iterator(); //safe way to remove while iterating
-
         while (it.hasNext()) {
             Brick brick = it.next();
-         //check if ball and brick overlap
-            if (b.getBoundsInParent().intersects(brick.getView().getBoundsInParent())) {
-                ball.bounceVertical(); // bounce off the brick surface
-                //onHit() reduces HP, returns true if brick is destroyed
-                if (brick.onHit()) {
-                    controller.addScore(brick.getPoints());
-                    brick.getView().setVisible(false); // hide broken brick
-                    it.remove(); // remove from list
-                }
-                break; //only handle one brick per frame
+            brick.collideWithBall(ball, controller);
+            if (brick.deadBrick()) {
+            	it.remove();
             }
         }
     }
