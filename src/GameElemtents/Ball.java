@@ -10,7 +10,7 @@ public class Ball extends GameObject{
 	// keeps track of current angle
 	private double angleDegrees = 45;
     final double DEFAULT_ANGLE = 360-90;
-	private double speed = 700;
+	private double speed = 800;
 	private Point2D velocity;
 	
 public void setDirection(double angleDegrees){
@@ -82,6 +82,10 @@ public void setDirection(double angleDegrees){
 
     public double getY() {
         return ((Circle) view).getCenterY();
+    }
+    
+    public Point2D getVelocity() {
+    	return this.velocity;
     }
     
     public void updateSpeed(double newSpeed) {

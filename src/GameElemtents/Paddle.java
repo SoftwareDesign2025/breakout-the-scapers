@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Window;
 
 //represents the paddle controlled by the player
-//paddle can only move left and right
+//paddle can only move left and right 
 public class Paddle extends GameObject{
 	private double speed = 800;
 	private boolean moveLeft = false;
