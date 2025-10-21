@@ -1,8 +1,5 @@
 package GameElemtents;
 
-import java.awt.Paint;
-
-import GameUtils.BreakoutController;
 import javafx.scene.Node;
 //base class for anything put or updated onscreen. Gives a shared view
 //field and a interface for updating objects
@@ -20,10 +17,9 @@ public abstract class GameObject {
 
     public abstract void update(double elapsedTime);
     
-    public boolean collideWithBall(Ball ball, BreakoutController controller) {
+    public boolean collideWithBall(Ball ball) {
     	// method stub, does nothing by default
     	// override depending on how you want to handle interactions
-    	//
     	return false;
     }
 }
