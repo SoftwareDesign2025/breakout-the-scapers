@@ -26,12 +26,17 @@ public class CollisionManager {
         Iterator<Brick> it = bricks.iterator(); //safe way to remove while iterating
         while (it.hasNext()) {
             Brick brick = it.next();
-            brick.collideWithBall(ball);
+            if (brick.collideWithBall(ball)) {
+            	controller.addScore(brick.getPoints());
+            };
             if (brick.deadBrick()) {
             	it.remove();
-            	controller.addScore(brick.getPoints());
             }
         }
+    }
+    
+    public static void handleBallBall(Ball ball) {
+       ball.collideWithBall(ball);
     }
 
 }

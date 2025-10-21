@@ -10,7 +10,7 @@ public class Ball extends GameObject{
 	// keeps track of current angle
 	private double angleDegrees = 45;
     final double DEFAULT_ANGLE = 360-90;
-	private double speed = 800;
+	private double speed = 600;
 	private Point2D velocity;
 	
 public void setDirection(double angleDegrees){
@@ -91,6 +91,15 @@ public void setDirection(double angleDegrees){
     	setDirection(this.angleDegrees);
     }
     
-    
+    @Override
+    public boolean collideWithBall(Ball ball) {
+    	Circle b = (Circle) ball.getView();
+    	if (b.getBoundsInParent().intersects(this.getView().getBoundsInParent())) {
+            this.bounceHorizontal();
+            this.bounceVertical();
+            return true;
+        }
+    	return false;
+    }
 
 }

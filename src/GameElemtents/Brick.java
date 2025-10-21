@@ -1,16 +1,16 @@
 package GameElemtents;
 
-
-import GameUtils.BreakoutController;
 import javafx.geometry.Bounds;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 //represents a single brick that can be hit by the ball
 public class Brick extends GameObject{
-	private int hp; //number of hits the brick can take
-    private int points; //points gained when destroyed
-    private boolean isBreakDead = false;
+	protected int hp; //number of hits the brick can take
+    protected int points; //points gained when destroyed
+    protected boolean isBreakDead = false;
+    private double chanceForPowerUp = 0.1f;
     
     private Boolean powerUpBrick = false;
     //makes a new brick at the given location and color
@@ -21,22 +21,33 @@ public class Brick extends GameObject{
         view = new Rectangle(x, y, width, height);
         ((Rectangle) view).setFill(color);
         
-        // make a 10% chance of a brick being a power up brick
-        if (Math.random() > 0.9) {
+        // if the odds are right make it
+        if (Math.random() < chanceForPowerUp) {
         	this.powerUpBrick = true;
         }
-        
-        
     }
 
     @Override
     public void update(double elapsedTime) {}
 
     // returns true if the hp is lower than 0
-    public boolean onHit() {
+        public boolean onHit() {
         hp--;
+        alterColorHue(10.0f); // change color hue on hit by 10 degrees in hue scale
         this.isBreakDead = hp <= 0;
         return isBreakDead;
+    }
+
+    protected void alterColorHue(double hueShift) {
+        // Example: Darken the color slightly on each hit
+        Paint currentPaint = ((Rectangle) view).getFill();
+
+        Color currentColor = (Color) currentPaint;
+        // So hue is a value between 0 and 360 degrees thats why we mod by 360
+        Color newColor = Color.hsb((currentColor.getHue() + hueShift) % 360,
+                                    currentColor.getSaturation(),
+                                    currentColor.getBrightness());
+        ((Rectangle) view).setFill(newColor);
         
     }
     
@@ -67,12 +78,13 @@ public class Brick extends GameObject{
         double vy = ball.getVelocity().getY();
 
         // Vertical bounce check: ball hits top or bottom and is moving towards it
-        boolean hitVertically = (ballRight >= brickLeft && ballLeft <= brickRight) &&
+        boolean hitVertically = 
                 ((Math.abs(ballBottom - brickTop) < Math.abs(ballRight - brickLeft) && vy > 0) || // hitting top while moving down
                  (Math.abs(ballTop - brickBottom) < Math.abs(ballRight - brickLeft) && vy < 0));  // hitting bottom while moving up
 
+        
         // Horizontal bounce check: ball hits left or right and is moving towards it
-        boolean hitHorizontally = (ballBottom >= brickTop && ballTop <= brickBottom) &&
+        boolean hitHorizontally = 
                 ((Math.abs(ballRight - brickLeft) < Math.abs(ballBottom - brickTop) && vx > 0) ||  // hitting left side while moving right
                  (Math.abs(ballLeft - brickRight) < Math.abs(ballBottom - brickTop) && vx < 0));   // hitting right side while moving left
 

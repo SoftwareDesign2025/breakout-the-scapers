@@ -1,6 +1,5 @@
 package GameUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +7,7 @@ import java.util.List;
 import javafx.animation.Timeline;
 import GameElemtents.Ball;
 import GameElemtents.Brick;
+import GameElemtents.BrickUnbreakable;
 import GameElemtents.Paddle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -19,7 +19,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import jdk.incubator.vector.VectorOperators.Test;
 import GameElemtents.PowerUps;
 
 
@@ -38,7 +37,7 @@ public class BreakoutController extends Scoring{
     
     private final Paint BRICK_COLOR = GameColors.SECONDARY_COLOR.getColor();
     private List<Brick> bricks;
-    private CollisionManager collisionManager;
+    private List<Brick> bricksOptional;
 
     private int score;
     private int lives;
@@ -75,13 +74,14 @@ public class BreakoutController extends Scoring{
         
         //create bricks
         bricks = new ArrayList<>();
+        bricksOptional = new ArrayList<>();
 
         // toDo for later make this into a method and call that 3 times
         
       //create a simple row of bricks
-        for (int i = 0; i < 10; i++) {
-            Brick brick = new Brick(50 + i * 50, 100, 40, 20, BRICK_COLOR, 1);
-            bricks.add(brick);
+        for (int i = 0; i < 9; i++) {
+            Brick brick = new BrickUnbreakable(50 + i * 50, 100, 40, 20, BRICK_COLOR, 1);
+            bricksOptional.add(brick);
             //add visual node to scene
             root.getChildren().add(brick.getView());
         }
@@ -198,6 +198,7 @@ public class BreakoutController extends Scoring{
         //collisions with ball paddle/bricks
         CollisionManager.handleBallPaddle(ball, paddle);
         CollisionManager.handleBallBricks(ball, bricks, this);
+        CollisionManager.handleBallBricks(ball, bricksOptional, this);
         
         if (bricks.isEmpty()) {
         	win_game();
