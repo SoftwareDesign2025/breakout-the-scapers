@@ -43,6 +43,7 @@ public class Brick extends GameObject{
     protected void setBrickColor(Color newColor) {
         ((Rectangle) view).setFill(newColor);
     }
+   
     
     public boolean hasPowerUp() {
         return powerUpBrick;
@@ -91,12 +92,8 @@ public class Brick extends GameObject{
     }
 
     
-    // If the brick is dead, hide it
     public boolean deadBrick() {
-    	if (isBreakDead) {
-    		this.getView().setVisible(false); // hide broken brick
-    	}
-    	return isBreakDead;
+        return hp <= 0;
     }
     
     @Override
@@ -109,9 +106,16 @@ public class Brick extends GameObject{
             if (this.onHit()) {
                 this.deadBrick();
             }
-            return true;
         }
-    	return false;
+        return false; // brick still alive
     }
+    
+    private void setVisible(boolean visible) {
+        view.setVisible(visible);
+    }
+
+	public int getHP() {
+		return this.hp;
+	}
 
 }
