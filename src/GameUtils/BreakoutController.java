@@ -80,7 +80,7 @@ public class BreakoutController extends Scoring{
         
       //create a simple row of bricks
         for (int i = 0; i < 9; i++) {
-            Brick brick = new BrickUnbreakable(50 + i * 50, 100, 40, 20, BRICK_COLOR, 1);
+            Brick brick = new BrickUnbreakable(50 + i * 50, 100, 40, 20, 1);
             bricksOptional.add(brick);
             //add visual node to scene
             root.getChildren().add(brick.getView());
@@ -88,7 +88,7 @@ public class BreakoutController extends Scoring{
         
       //create a simple row of bricks
         for (int i = 0; i < 10; i++) {
-            Brick brick = new Brick(50 + i * 50, 150, 40, 20, BRICK_COLOR, 1);
+            Brick brick = new Brick(50 + i * 50, 150, 40, 20, 1);
             bricks.add(brick);
             //add visual node to scene
             root.getChildren().add(brick.getView());//
@@ -96,7 +96,7 @@ public class BreakoutController extends Scoring{
         
       //create a simple row of bricks
         for (int i = 0; i < 10; i++) {
-            Brick brick = new Brick(50 + i * 50, 200, 40, 20, BRICK_COLOR, 1);
+            Brick brick = new Brick(50 + i * 50, 200, 40, 20, 1);
             bricks.add(brick);
             //add visual node to scene
             root.getChildren().add(brick.getView());

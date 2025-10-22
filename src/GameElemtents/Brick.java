@@ -1,5 +1,6 @@
 package GameElemtents;
 
+import GameUtils.ColorEditor;
 import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -14,7 +15,7 @@ public class Brick extends GameObject{
     
     private Boolean powerUpBrick = false;
     //makes a new brick at the given location and color
-    public Brick(double x, double y, double width, double height, Paint color, int hp) {
+    public Brick(double x, double y, double width, double height, int hp) {
         this.hp = hp;
         this.points = 150; 
         //makes a rectangle to visually represent the brick
@@ -33,22 +34,14 @@ public class Brick extends GameObject{
     // returns true if the hp is lower than 0
         public boolean onHit() {
         hp--;
-        alterColorHue(10.0f); // change color hue on hit by 10 degrees in hue scale
+        color = ColorEditor.alterColorHue(10.0f, color); // change color hue on hit by 10 degrees in hue scale
+        setBrickColor(color);
         this.isBreakDead = hp <= 0;
         return isBreakDead;
     }
 
-    protected void alterColorHue(double hueShift) {
-        // Example: Darken the color slightly on each hit
-        Paint currentPaint = ((Rectangle) view).getFill();
-
-        Color currentColor = (Color) currentPaint;
-        // So hue is a value between 0 and 360 degrees thats why we mod by 360
-        Color newColor = Color.hsb((currentColor.getHue() + hueShift) % 360,
-                                    currentColor.getSaturation(),
-                                    currentColor.getBrightness());
+    protected void setBrickColor(Color newColor) {
         ((Rectangle) view).setFill(newColor);
-        
     }
     
     public boolean hasPowerUp() {
