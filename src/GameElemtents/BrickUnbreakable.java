@@ -1,16 +1,16 @@
 package GameElemtents;
 
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import GameUtils.ColorEditor;
+
 
 public class BrickUnbreakable extends Brick {
 
-	public BrickUnbreakable(double x, double y, double width, double height, Paint color, int hp) {
-		super(x, y, width, height, color, hp);
-		alterColorSaturation(.2f);
-		alterColorBrightness(-.1f);
-		super.alterColorHue(360/2);
-		
+	public BrickUnbreakable(double x, double y, double width, double height, int hp) {
+		super(x, y, width, height, hp);
+		color = ColorEditor.alterColorSaturation(.2f, color);
+		color = ColorEditor.alterColorBrightness(-.1f, color);
+		color = ColorEditor.alterColorHue(360/2, color);
+		setBrickColor(color);
 	}
 	
 	// So we just do not substract the HP from the block
@@ -18,28 +18,16 @@ public class BrickUnbreakable extends Brick {
 	public boolean onHit() {
 		super.onHit();
 		// brick is never destroyed no matter how little life it has
-		isBreakDead = false;
+		if (isBreakDead) {
+			// make the color have no saturation. the scale goes from 0 to 1 so -1 ensures it is 0
+			color = ColorEditor.alterColorSaturation(-1, color);
+			setBrickColor(color);
+			// after "brick is dead" earns no points
+			this.points = 0;
+		}
+		this.isBreakDead = false;
         return isBreakDead;
 	}
 
-	private void alterColorSaturation(double saturationShift) {
-		Paint currentPaint = ((javafx.scene.shape.Rectangle) view).getFill();
-
-		Color currentColor = (javafx.scene.paint.Color) currentPaint;
-		Color newColor = Color.hsb(currentColor.getHue(),
-									Math.max(0, currentColor.getSaturation() + saturationShift),
-									currentColor.getBrightness());
-		((javafx.scene.shape.Rectangle) view).setFill(newColor);
-	}
-
-	private void alterColorBrightness(double brightnessShift) {
-		Paint currentPaint = ((javafx.scene.shape.Rectangle) view).getFill();
-
-		Color currentColor = (javafx.scene.paint.Color) currentPaint;
-		Color newColor = Color.hsb(currentColor.getHue(),
-									currentColor.getSaturation(),
-									Math.max(0, currentColor.getBrightness() + brightnessShift));
-		((javafx.scene.shape.Rectangle) view).setFill(newColor);
-	}
 
 }

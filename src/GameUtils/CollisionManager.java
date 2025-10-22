@@ -6,9 +6,6 @@ import java.util.List;
 import GameElemtents.Ball;
 import GameElemtents.Brick;
 import GameElemtents.Paddle;
-import javafx.geometry.Bounds;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 
 //keeps the physics and scoring logic separate from the controller
 public class CollisionManager { 
@@ -22,7 +19,6 @@ public class CollisionManager {
 	//checks collisions between the ball and all bricks
     //removes bricks when destroyed, and adds points
     public static void handleBallBricks(Ball ball, List<Brick> bricks, BreakoutController controller) {
-        Circle b = (Circle) ball.getView();
         Iterator<Brick> it = bricks.iterator(); //safe way to remove while iterating
         while (it.hasNext()) {
             Brick brick = it.next();
