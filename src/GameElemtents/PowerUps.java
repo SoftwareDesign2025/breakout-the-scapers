@@ -8,7 +8,7 @@ import javafx.scene.shape.Circle;
 
 public class PowerUps extends GameObject {
 
-    private Point2D velocity;
+    private Point2D velocity; 
     private boolean active = true;
 	
     
