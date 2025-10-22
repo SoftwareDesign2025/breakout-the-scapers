@@ -1,6 +1,5 @@
 package GameUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.List;
 import javafx.animation.Timeline;
 import GameElemtents.Ball;
 import GameElemtents.Brick;
+import GameElemtents.BrickUnbreakable;
 import GameElemtents.Paddle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -20,7 +20,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import jdk.incubator.vector.VectorOperators.Test;
 import GameElemtents.PowerUps;
 
 
@@ -30,7 +29,7 @@ public class BreakoutController extends Scoring{
     
     private final Paint BALL_COLOR = GameColors.ACCENT_COLOR.getColor();
     public final int BALL_RADIUS = 10;
-    private final int BALL_SPEED = 20;
+    private final int BALL_SPEED = 100;
     
     public final int LIVES_START = 3;
 
@@ -39,7 +38,7 @@ public class BreakoutController extends Scoring{
     
     private final Paint BRICK_COLOR = GameColors.SECONDARY_COLOR.getColor();
     private List<Brick> bricks;
-    private CollisionManager collisionManager;
+    private List<Brick> bricksOptional;
 
     private int score;
     private int lives;
@@ -81,8 +80,14 @@ public class BreakoutController extends Scoring{
         
         //create bricks
         bricks = new ArrayList<>();
-        collisionManager = new CollisionManager();
+        bricksOptional = new ArrayList<>();
+
+        // toDo for later make this into a method and call that 3 times
         
+        brickMaker(100);
+        brickMaker(150);
+        brickMaker(200);
+
         score = 0;
         lives = LIVES_START;
         //track current level
@@ -103,6 +108,15 @@ public class BreakoutController extends Scoring{
         
     }
     
+    private void brickMaker(int yaxis) {
+        for (int i = 0; i < 10; i++) {
+            Brick brick = new Brick(50 + i * 50, yaxis, 40, 20, 1);
+            bricks.add(brick);
+            //add visual node to scene
+            root.getChildren().add(brick.getView());
+        }
+    }
+    
     
 
     // makes the stage that shows the player the game has been won 
@@ -115,7 +129,7 @@ public class BreakoutController extends Scoring{
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("win_game.fxml"));
             Parent root = loader.load();
-            
+            // set current score
             Label showScore = (Label) root.lookup("#scoreLabel");
             if (showScore != null) {
             	showScore.setText("Final Score: " + score);
@@ -124,10 +138,12 @@ public class BreakoutController extends Scoring{
             
             Label oldScoreLabel = (Label) root.lookup("#prevHigh");
             
-            if (score > readLastNumberFromFile()) {
-            	checkHighScore(score);
-            	oldScoreLabel.setText("High Score is: " + score);
-            }
+            System.out.println(readLastNumberFromFile());
+            System.out.println(score);
+        
+        	checkHighScore(score);
+        	oldScoreLabel.setText("High Score is: " + score);
+            
             
             
             Stage stage = (Stage) scoreLabel.getScene().getWindow();
@@ -156,7 +172,22 @@ public class BreakoutController extends Scoring{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("game_over.fxml"));
             Parent root = loader.load();
             
-
+            Label showScore = (Label) root.lookup("#scoreLabel");
+            if (showScore != null) {
+            	showScore.setText("Your Failed Final Score: " + score);
+            }
+            
+            
+            Label oldScoreLabel = (Label) root.lookup("#prevHigh");
+            
+            
+            System.out.println(readLastNumberFromFile());
+            System.out.println(score);
+            
+        	checkHighScore(score);
+        	oldScoreLabel.setText("High Score is: " + readLastNumberFromFile());
+      
+            
             
             Stage stage = (Stage) scoreLabel.getScene().getWindow();
             Scene scene = new Scene(root, 600, 800);
@@ -175,12 +206,15 @@ public class BreakoutController extends Scoring{
     
     public void step(double elapsedTime) {
     	//move the ball based on its velocity and the elapsed frame time
-        ball.move(elapsedTime);
+    	
+    	
+    	
+        ball.update(elapsedTime);
         paddle.update(elapsedTime);
         //collisions with ball paddle/bricks
-        collisionManager.handleBallPaddle(ball, paddle);
-        collisionManager.handleBallBricks(ball, bricks, this);
-        
+        CollisionManager.handleBallPaddle(ball, paddle);
+        CollisionManager.handleBallBricks(ball, bricks, this);
+        CollisionManager.handleBallBricks(ball, bricksOptional, this);
         
         //update and collect power-ups
         Iterator<PowerUps> puIterator = powerUps.iterator();
