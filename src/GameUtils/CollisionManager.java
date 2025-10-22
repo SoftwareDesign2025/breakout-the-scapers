@@ -58,9 +58,9 @@ public class CollisionManager {
         Iterator<Brick> it = bricks.iterator(); //safe way to remove while iterating
         while (it.hasNext()) {
             Brick brick = it.next();
-            brick.collideWithBall(ball, controller);
-            if (brick.deadBrick()) {
-            	it.remove();
+            boolean destroyed = brick.collideWithBall(ball, controller);
+            if (destroyed) {
+                it.remove();
             }
         }
     }

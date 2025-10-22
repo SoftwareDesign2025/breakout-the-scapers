@@ -32,13 +32,18 @@ public class Brick extends GameObject{
     @Override
     public void update(double elapsedTime) {}
 
-    // returns true if the hp is lower than 0
-    public boolean onHit() {
-        hp--;
-        this.isBreakDead = hp <= 0;
-        return isBreakDead;
-        
+    //obstacle logic)
+    public boolean isUnbreakable() {
+        return hp == Integer.MAX_VALUE;
     }
+
+    //returns true if the hp is lower than 0
+    public boolean onHit() {
+        if (isUnbreakable()) return false;
+        hp--;
+        return hp <= 0;
+    }
+   
     
     public boolean hasPowerUp() {
         return powerUpBrick;
@@ -86,28 +91,32 @@ public class Brick extends GameObject{
     }
 
     
-    // If the brick is dead, hide it
     public boolean deadBrick() {
-    	if (isBreakDead) {
-    		this.getView().setVisible(false); // hide broken brick
-    	}
-    	return isBreakDead;
+        return hp <= 0;
     }
     
-    @Override
     public boolean collideWithBall(Ball ball, BreakoutController controller) {
+       
     	Circle b = (Circle) ball.getView();
-    	
-    	if (b.getBoundsInParent().intersects(this.getView().getBoundsInParent())) {
-            this.bounceBall(ball);; // bounce off the brick surface
-            //onHit() reduces HP, returns true if brick is destroyed
-            if (this.onHit()) {
-                controller.addScore(this.getPoints());
-                this.deadBrick();
+        Rectangle brickView = (Rectangle) view; // assuming view is Rectangle
+        if (b.getBoundsInParent().intersects(brickView.getBoundsInParent())) {
+            ball.bounceVertical();
+            hp--; // reduce hit points
+            if (hp <= 0) {
+                setVisible(false); // hide visually
+                controller.addScore(points);
+                return true; // brick is dead
             }
-            return true;
         }
-    	return false;
+        return false; // brick still alive
     }
+    
+    private void setVisible(boolean visible) {
+        view.setVisible(visible);
+    }
+
+	public int getHP() {
+		return this.hp;
+	}
 
 }

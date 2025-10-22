@@ -2,8 +2,10 @@ package GameElemtents;
 
 
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 
 public class PowerUps extends GameObject {
@@ -36,4 +38,26 @@ public class PowerUps extends GameObject {
        active = false; // stop movement
        view.setVisible(false);
    }
+   
+   //powerup subclasses
+   public static class ExpandPaddlePowerUp extends PowerUps {
+       public ExpandPaddlePowerUp(double x, double y) {
+           super(x, y, 10, Color.BLUE);
+       }
+   }
+
+//   public static class MultiBallPowerUp extends PowerUps {
+//       public MultiBallPowerUp(double x, double y) {
+//           super(x, y, 10, Color.GREEN);
+//       }
+
+       
+   public void applyEffect(Paddle paddle) {
+       Rectangle view = (Rectangle) paddle.getView();
+       view.setWidth(view.getWidth() * 1.5);
+   }
+   //to check bounds
+   public javafx.scene.Node getView() {
+	    return view;
+	}
 }
