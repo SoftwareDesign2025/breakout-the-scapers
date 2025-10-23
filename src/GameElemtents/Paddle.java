@@ -16,11 +16,13 @@ public class Paddle extends GameObject{
 	private boolean outOfBoundsLeft = false;
 	private boolean outOfBoundsRight = false;
 	
+	private double originalWidth; //for level change and powerups
 	
     public Paddle(double x, double y, double width, double height, Paint color) {
         //makes a visual paddle as a rectangle
     	view = new Rectangle(x, y, width, height);
         ((Rectangle) view).setFill(color);
+        this.originalWidth = width;  // store the starting size
     }
 
     @Override
@@ -100,5 +102,25 @@ public class Paddle extends GameObject{
         }
         return false;
     }
+
+	public void expand() {
+		Rectangle rect = (Rectangle) getView();
+	    double oldWidth = rect.getWidth();
+	    double newWidth = oldWidth * 2;  // doubles the width
+
+	    // Center the paddle by shifting it left half of the growth amount
+	    rect.setX(rect.getX() - (newWidth - oldWidth) / 2);
+	    rect.setWidth(newWidth);
+		
+	}
+	
+	// resets paddle width to original when a new level starts
+	public void resetSize() {
+	    Rectangle rect = (Rectangle) getView();
+	    double currentWidth = rect.getWidth();
+	    double diff = currentWidth - originalWidth;
+	    rect.setWidth(originalWidth);
+	    rect.setX(rect.getX() + diff / 2); // re-center after shrinking back
+	}
 
 }
