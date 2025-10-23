@@ -3,7 +3,6 @@ package GameElemtents;
 import GameUtils.ColorEditor;
 import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 //represents a single brick that can be hit by the ball
@@ -11,7 +10,7 @@ public class Brick extends GameObject{
 	protected int hp; //number of hits the brick can take
     protected int points; //points gained when destroyed
     protected boolean isBreakDead = false;
-    private double chanceForPowerUp = 0.1f;
+    private final double CHANCE_FOR_POWERUP = 0.1f;
     
     private Boolean powerUpBrick = false;
     //makes a new brick at the given location and color
@@ -23,7 +22,7 @@ public class Brick extends GameObject{
         ((Rectangle) view).setFill(color);
         
         // if the odds are right make it
-        if (Math.random() < chanceForPowerUp) {
+        if (Math.random() < CHANCE_FOR_POWERUP) {
         	this.powerUpBrick = true;
         }
     }
