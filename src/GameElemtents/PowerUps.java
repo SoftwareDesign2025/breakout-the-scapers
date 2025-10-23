@@ -39,10 +39,20 @@ public class PowerUps extends GameObject {
        view.setVisible(false);
    }
    
+ //to check bounds
+   public javafx.scene.Node getView() {
+	    return view;
+	}
+   
    //powerup subclasses
    public static class ExpandPaddlePowerUp extends PowerUps {
        public ExpandPaddlePowerUp(double x, double y) {
            super(x, y, 10, Color.BLUE);
+       }
+       
+       public void applyEffect(Paddle paddle) {
+           Rectangle view = (Rectangle) paddle.getView();
+           view.setWidth(view.getWidth() * 1.5);
        }
    }
 
@@ -51,13 +61,4 @@ public class PowerUps extends GameObject {
 //           super(x, y, 10, Color.GREEN);
 //       }
 
-       
-   public void applyEffect(Paddle paddle) {
-       Rectangle view = (Rectangle) paddle.getView();
-       view.setWidth(view.getWidth() * 1.5);
-   }
-   //to check bounds
-   public javafx.scene.Node getView() {
-	    return view;
-	}
 }
