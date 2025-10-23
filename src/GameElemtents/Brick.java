@@ -20,7 +20,7 @@ public class Brick extends GameObject{
         this.points = 150; 
         //makes a rectangle to visually represent the brick
         view = new Rectangle(x, y, width, height);
-        ((Rectangle) view).setFill(color);
+        setBrickColor(this.color);
         
         // if the odds are right make it
         if (Math.random() < CHANCE_FOR_POWERUP) {
