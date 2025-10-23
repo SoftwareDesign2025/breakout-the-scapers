@@ -10,10 +10,12 @@ public class Ball extends GameObject{
 	// keeps track of current angle
 	private double angleDegrees = 45;
     final double DEFAULT_ANGLE = 360-90;
-	private double speed = 800;
+	private double speed = 1000;
 	private Point2D velocity;
 	
-public void setDirection(double angleDegrees){
+    // this method uses some trigonometry tricks to set the direction of the ball
+    // based on the angle its moving and the speed. the math is explained in the comments
+    public void setDirection(double angleDegrees){
 		this.angleDegrees = angleDegrees;
 		// to get the velocity in x we do cosine of angle * speed
 		// cosine means how horizontal something is so x axis
@@ -37,11 +39,7 @@ public void setDirection(double angleDegrees){
     //update ball position based on velocity and elapsed time
     @Override
     public void update(double elapsedTime) {
-        move(elapsedTime);
-    }
-
-    public void move(double elapsedTime) {
-        Circle c = (Circle) view;
+    	Circle c = (Circle) view;
         c.setCenterX(c.getCenterX() + velocity.getX() * elapsedTime);
         c.setCenterY(c.getCenterY() + velocity.getY() * elapsedTime);
 
@@ -62,14 +60,17 @@ public void setDirection(double angleDegrees){
         }
     }
 
+    // this method changes the vertical direction of the ball
     public void bounceVertical() {
         velocity = new Point2D(velocity.getX(), -velocity.getY());
     }
 
+    // this method changes the horizontal direction of the ball
     public void bounceHorizontal() {
         velocity = new Point2D(-velocity.getX(), velocity.getY());
     }
 
+    // this method sets the position of the value to the x and y cordinates given
     public void reset(double x, double y) {
         ((Circle) view).setCenterX(x);
         ((Circle) view).setCenterY(y);
@@ -84,14 +85,38 @@ public void setDirection(double angleDegrees){
         return ((Circle) view).getCenterY();
     }
     
+    // method to get velocity of ball
     public Point2D getVelocity() {
     	return this.velocity;
     }
     
+    // method to update speed of ball
     public void updateSpeed(double newSpeed) {
     	this.speed = newSpeed; // set new speed
     	// update velocity vector continuing with current angle
     	setDirection(this.angleDegrees);
+    }
+    
+    // this implementation of collide with ball
+    // takes in the ball, it checks if its colliding with the ball
+    // if it is it bounces the ball both horizontally and vertically to deflect it
+    // not really physically accurate but works for our game for now
+    @Override
+    public boolean collideWithBall(Ball ball) {
+    	Circle b = (Circle) ball.getView();
+    	if (b.getBoundsInParent().intersects(this.getView().getBoundsInParent())) {
+            this.bounceHorizontal();
+            this.bounceVertical();
+            return true;
+        }
+    	return false;
+    }
+
+    // this function allows for you to increase or decrease the speed of the ball
+    // it returns nothing and takes in the amount of speed to change by as the parameter
+    public void accelerate(double deltaSpeed) {
+    	this.speed += deltaSpeed;
+    	update(this.speed);
     }
 
 }

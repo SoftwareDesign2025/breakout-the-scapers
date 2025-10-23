@@ -9,8 +9,11 @@
 
 
 <VBox alignment="CENTER" spacing="20" xmlns:fx="http://javafx.com/fxml">
+
     <Label text="Game Over!" style="-fx-font-size: 36px; -fx-text-fill: red;" />
+    <Label fx:id= "prevHigh" text="old high score: 0" style="-fx-font-size: 20px;"/>
     <Label text= "You Have Been Rekt!!" style="-fx-font-size: 36px; -fx-text-fill: black;" />
+    <Label fx:id="scoreLabel" text="Score: 0" style="-fx-font-size: 20px;" />
     
     <Button text="Exit" fx:id="exitButton" />
 </VBox>

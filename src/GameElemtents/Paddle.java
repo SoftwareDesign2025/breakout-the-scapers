@@ -3,6 +3,7 @@ package GameElemtents;
 
 import javafx.geometry.Bounds;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Window;
 
@@ -61,6 +62,45 @@ public class Paddle extends GameObject{
 
     public void setMoveRight(boolean value) {
         moveRight = value;
+    }
+    
+    @Override
+    public boolean collideWithBall(Ball ball) {
+    	Circle b = (Circle) ball.getView(); // ball's graphical node
+        Rectangle p = (Rectangle) this.getView(); // paddle's graphical node
+        // 
+        double minAngle = 15;
+        // so 180 is a full semi circle we want to make it so that there is a range
+        double maxAngle = 180 - minAngle;
+        double angleRange = maxAngle-minAngle;
+        double bounceAngle;
+
+        if (b.getBoundsInParent().intersects(p.getBoundsInParent())) {
+        	// with the angle range we can calculate proportionally how much
+        	// the ball is in the paddle
+        	Bounds paddleBounds = p.getBoundsInParent();
+        	double ballX = b.getCenterX();
+        	double distanceFromScreenEdge = paddleBounds.getMinX();
+        	double ballRelativeOffsetToPaddle = ballX - distanceFromScreenEdge;
+        	double proportionBallPaddle = ballRelativeOffsetToPaddle / p.getWidth();
+        	// we want this to be a proportion so we need to keep it between 0 and 1 to make sure the
+        	// minimum and max angles are respected
+        	proportionBallPaddle = Math.clamp(proportionBallPaddle, 0, 1); 
+        	// so we get how much of the full range we keep based on how close the x position
+        	// of the ball is to the with of the paddle
+        	// we add the minimum and that way we get out bounce angle
+        	bounceAngle =  (angleRange * proportionBallPaddle) + minAngle;
+
+            // Move the ball just above the paddle to avoid re-collision
+            double newY = p.getY() - b.getRadius(); // 1 pixel gap for safety
+            b.setCenterY(newY);
+            // Set new bounce direction to be up by adding 180. because
+            // up to this point we were going under the assumption +y is up but its down
+            // so we add 180 to ofsset that
+            ball.setDirection(180 + bounceAngle);
+            return true;
+        }
+        return false;
     }
 
 	public void expand() {
