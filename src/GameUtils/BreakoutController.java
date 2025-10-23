@@ -28,14 +28,12 @@ public class BreakoutController extends Scoring{
     
     private final Paint BALL_COLOR = GameColors.ACCENT_COLOR.getColor();
     public final int BALL_RADIUS = 10;
-    private final int BALL_SPEED = 100;
     
     public final int LIVES_START = 3;
 
     private Paddle paddle;
     private Ball ball; 
-    
-    private final Paint BRICK_COLOR = GameColors.SECONDARY_COLOR.getColor();
+
     private List<Brick> bricks;
     private List<Brick> bricksOptional;
 
@@ -43,6 +41,7 @@ public class BreakoutController extends Scoring{
     private int lives;
     private Text scoreLabel;
     private Text livesLabel;
+    private Color textColor = GameColors.TEXT_COLOR.getColor(); 
     
     private Text highScoreText;
     
@@ -81,14 +80,15 @@ public class BreakoutController extends Scoring{
         brickMaker(100);
         brickMaker(150);
         brickMaker(200);
+        brickMakerUbreakable(250);
 
         score = 0;
         lives = LIVES_START;
 
         scoreLabel = new Text(20, 20, "Score: 0");
-        scoreLabel.setFill(Color.BLACK);
+        scoreLabel.setFill(textColor);
         livesLabel = new Text(500, 20, "Lives: " + lives);
-        livesLabel.setFill(Color.BLACK);
+        livesLabel.setFill(textColor);
         
 //        highScoreText = new Text(20,20, "High Score: " + readLastNumberFromFile());
 //        highScoreText.setFill(Color.BLACK);
@@ -100,13 +100,21 @@ public class BreakoutController extends Scoring{
     
     private void brickMaker(int yaxis) {
         for (int i = 0; i < 10; i++) {
-            Brick brick = new Brick(50 + i * 50, yaxis, 40, 20, 1);
+            Brick brick = new Brick(50 + i * 50, yaxis, 40, 20, 3);
             bricks.add(brick);
             //add visual node to scene
             root.getChildren().add(brick.getView());
         }
     }
     
+    private void brickMakerUbreakable(int yaxis) {
+        for (int i = 0; i < 10; i++) {
+            Brick brick = new BrickUnbreakable(50 + i * 50, yaxis, 40, 20, 3);
+            bricks.add(brick);
+            //add visual node to scene
+            root.getChildren().add(brick.getView());
+        }
+    }
     
 
     // makes the stage that shows the player the game has been won 

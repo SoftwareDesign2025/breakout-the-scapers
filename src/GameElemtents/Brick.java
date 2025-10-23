@@ -13,6 +13,7 @@ public class Brick extends GameObject{
     private final double CHANCE_FOR_POWERUP = 0.1f;
     
     private Boolean powerUpBrick = false;
+
     //makes a new brick at the given location and color
     public Brick(double x, double y, double width, double height, int hp) {
         this.hp = hp;
@@ -27,18 +28,21 @@ public class Brick extends GameObject{
         }
     }
 
+    // for now update does nothing
     @Override
     public void update(double elapsedTime) {}
 
-    // returns true if the hp is lower than 0
-        public boolean onHit() {
+    // returns true if the brick is destroyed
+    public boolean onHit() {
         hp--;
-        color = ColorEditor.alterColorHue(10.0f, color); // change color hue on hit by 10 degrees in hue scale
+        color = ColorEditor.alterColorHue(15.0f, color);
         setBrickColor(color);
         this.isBreakDead = hp <= 0;
         return isBreakDead;
     }
 
+    // assumes the brick is a rectangle
+    // sets the color of the brick
     protected void setBrickColor(Color newColor) {
         ((Rectangle) view).setFill(newColor);
     }
@@ -47,11 +51,19 @@ public class Brick extends GameObject{
         return powerUpBrick;
     }
 
-
     public int getPoints() {
         return points;
     }
     
+    // method to handle bouncing the ball off the brick
+    // the logic it uses first checks which side of the brick the ball is hitting
+    // then it checks if the ball is moving towards that side
+    // if both are true it reverses the appropriate velocity component
+    // which are the big boolean checks. To do that it gets the bounds of both the ball and the bricks
+    // for both up down left and right sides it checks if the distance between the ball edge and brick edge is less than the distance to the other axis edge
+    // this way we know which side the ball is closest to. The reason we check the direction of movement is to avoid weird behavior when the ball is inside the brick due to high speed
+    // sometimes the ball bounces in the side of the brick and while is technically touching the side
+    // it is already moving away from it so we dont want to reverse the velocity in that case
     private void bounceBall(Ball ball) {
         Circle ballView = (Circle) ball.getView();
         Bounds brickBounds = this.getView().getBoundsInParent();

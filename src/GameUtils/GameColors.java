@@ -8,12 +8,12 @@ import javafx.scene.paint.Color;
 // https://colorhunt.co/palette/0046ff73c8d2f5f1dcff9013
 // https://docs.oracle.com/javase/8/javafx/api/javafx/scene/paint/Color.html
 public enum GameColors {
-	FOREGROUND(Color.web("#0046FF")), 
-	BACKGROUND(Color.web("#F5F1DC")),
-	TEXT_COLOR(Color.web("#F5F1DC")),
-	PRIMARY_COLOR(Color.web("#0046FF")),
-	SECONDARY_COLOR(Color.web("#73C8D2")),
-	ACCENT_COLOR(Color.web("#FF9013"));
+	FOREGROUND(Color.web("#EF7722")), 
+	BACKGROUND(Color.web("#EBEBEB")),
+	TEXT_COLOR(Color.web("#EF7722")),
+	PRIMARY_COLOR(Color.web("#EF7722")),
+	SECONDARY_COLOR(Color.web("#0BA6DF")),
+	ACCENT_COLOR(Color.web("#FAA533"));
 	
 	private final Color color;
 
