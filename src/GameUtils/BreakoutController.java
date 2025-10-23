@@ -197,16 +197,11 @@ public class BreakoutController extends Scoring{
         }
         //level progression
         if (allBreakableBricksCleared()) {
-            currentLevel++;
             nextLevel();
-            if (currentLevel > MAX_LEVELS) {
-                win_game();
-                return;
-            } else {
-                loadLevel(currentLevel);
+            if (currentLevel <= MAX_LEVELS) {
                 resetBall();
-                return;
             }
+            return;
         }
 
         //if ball falls below the screen, lose a life and reset ball
@@ -263,14 +258,42 @@ public class BreakoutController extends Scoring{
     
     //level generator
     private void loadLevel(int level, Group root ) {
-        bricks.clear();
+    	//remove previous power-up nodes from scene (important: do this BEFORE clearing the list)
+        if (powerUps != null) {
+            for (PowerUps pu : powerUps) {
+                if (pu != null && pu.getView() != null) {
+                    root.getChildren().remove(pu.getView());
+                }
+            }
+        }
+        // now clear the list
         powerUps.clear();
-        paddle.resetSize();
-        
-        root.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Rectangle && node != paddle.getView());
 
+        //clear bricks (and remove their nodes)
+        if (bricks != null) {
+            for (Brick b : bricks) {
+                if (b != null && b.getView() != null) {
+                    root.getChildren().remove(b.getView());
+                }
+            }
+        }
+        bricks.clear();
+
+        //reset paddle/power-up state
+        paddle.resetSize();
+
+        //remove any leftover rectangles (old bricks) but keep paddle/ball/labels
+        root.getChildren().removeIf(node -> {
+            // keep paddle and ball and UI texts
+            if (node == paddle.getView() || node == ball.getView() || node == scoreLabel || node == livesLabel) {
+                return false;
+            }
+            // remove shapes (rectangles / circles) that are not the UI/paddle/ball
+            return node instanceof javafx.scene.shape.Shape;
+        });
+
+        //make sure we create at most one power-up per level if desired
         boolean expandPowerUpCreated = false;
-        boolean multiBallPowerUpCreated = false;
         
         switch (level) {
             case 1 -> {
@@ -315,6 +338,10 @@ public class BreakoutController extends Scoring{
                     }
                 }
             }
+            default -> {
+                // fallback: treat as level 1
+                loadLevel(1, root);
+            }
         }
     }
     
@@ -325,17 +352,20 @@ public class BreakoutController extends Scoring{
 
     //called when all bricks are cleared to progress to next level.
    private void nextLevel() {
-       System.out.println("Level cleared! Loading next level...");
-       int nextLevel = ++currentLevel; // move to next level
-
-       if (nextLevel <= 3) { // example: only 3 levels
-           Group root = (Group) ball.getView().getScene().getRoot();
-           loadLevel(nextLevel, root);
-           resetBall();
-       } else {
-           System.out.println("You win! Final score: " + score);
-           gameOver();
+	   currentLevel++;
+       System.out.println("Level cleared! Loading next level: " + currentLevel);
+       
+       if (currentLevel > MAX_LEVELS) {
+           win_game();
+           return;
        }
+
+       //load the next level
+       loadLevel(currentLevel, root);
+       //reset any temporary power-ups
+       paddle.resetSize();
+       //reset ball and continue
+       resetBall();
    }
    
    //to check if all removable bricks are removed

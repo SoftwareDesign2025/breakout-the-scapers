@@ -54,14 +54,27 @@ public class CollisionManager {
 	//checks collisions between the ball and all bricks
     //removes bricks when destroyed, and adds points
     public void handleBallBricks(Ball ball, List<Brick> bricks, BreakoutController controller) {
-        Circle b = (Circle) ball.getView();
+    	
         Iterator<Brick> it = bricks.iterator(); //safe way to remove while iterating
+        
         while (it.hasNext()) {
             Brick brick = it.next();
-            boolean destroyed = brick.collideWithBall(ball, controller);
-            if (destroyed) {
-                it.remove();
-            }
+            
+         // Check collision regardless of whether it's unbreakable
+            if (ball.getView().getBoundsInParent().intersects(brick.getView().getBoundsInParent())) {
+                // Always bounce
+                ball.bounceVertical();
+            
+         // skip unbreakable bricks entirely
+                if (!brick.isUnbreakable()) {
+                    boolean destroyed = brick.onHit();
+                    if (destroyed) {
+                        brick.getView().setVisible(false);
+                        controller.addScore(brick.getPoints());
+                        it.remove();
+                    }
+                }
+            }	
         }
     }
 
