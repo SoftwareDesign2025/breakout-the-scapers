@@ -95,7 +95,7 @@ public class Ball extends GameObject{
     
     //especially for powerups
     public void setVelocity(Point2D newVelocity) {
-        this.velocity = newVelocity;
+        updateSpeed(newVelocity.magnitude());
     }
     
     // method to update speed of ball
@@ -145,7 +145,7 @@ public class Ball extends GameObject{
     
     public void resetSpeed() {
         // reset to your initial speed, e.g.:
-        velocity = new Point2D(200, -200);
+        updateSpeed(DEFAULT_SPEED);
     }
 
 }
