@@ -22,7 +22,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import GameElemtents.PowerUps;
 
-
+//score keeper
 public class BreakoutController extends Scoring{
 	private final Paint PADDLE_COLOR = GameColors.PRIMARY_COLOR.getColor();
     public static final int PADDLE_SPEED = 10;
