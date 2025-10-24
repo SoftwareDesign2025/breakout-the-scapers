@@ -93,6 +93,11 @@ public class Ball extends GameObject{
     	return this.velocity;
     }
     
+    //especially for powerups
+    public void setVelocity(Point2D newVelocity) {
+        this.velocity = newVelocity;
+    }
+    
     // method to update speed of ball
     public void updateSpeed(double newSpeed) {
     	this.speed = newSpeed; // set new speed
@@ -136,6 +141,11 @@ public class Ball extends GameObject{
     public void offsetPositionVertival(double deltaY) {
     	Circle c = (Circle) view;
         c.setCenterY(c.getCenterY() + deltaY);
+    }
+    
+    public void resetSpeed() {
+        // reset to your initial speed, e.g.:
+        velocity = new Point2D(200, -200);
     }
 
 }

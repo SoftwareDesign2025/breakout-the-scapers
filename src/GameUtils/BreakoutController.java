@@ -284,6 +284,12 @@ public class BreakoutController extends Scoring{
         if (pu instanceof PowerUps.ExpandPaddlePowerUp) {
             paddle.expand(); // expands paddle width
         } 
+        else if (pu instanceof PowerUps.SlowBallPowerUp) {
+            ((PowerUps.SlowBallPowerUp) pu).applyEffect(ball);
+        } 
+        else if (pu instanceof PowerUps.ExtraLifePowerUp) {
+            ((PowerUps.ExtraLifePowerUp) pu).applyEffect(this);
+        }
 //        else if (pu instanceof PowerUps.MultiBallPowerUp) {
 //            // logic to spawn additional balls if implemented
 //        }
@@ -339,8 +345,10 @@ public class BreakoutController extends Scoring{
             
         });
 
-        //make sure we create at most one power-up per level if desired
+        //make sure we create at most one powerup per level
         boolean expandPowerUpCreated = false;
+        boolean slowBallPowerUpCreated = false;
+        boolean extraLifePowerUpCreated = false;
         
         switch (level) {
             case 1 -> {
@@ -370,6 +378,20 @@ public class BreakoutController extends Scoring{
                             root.getChildren().add(p.getView());
                             expandPowerUpCreated = true;
                         }
+                        if (!slowBallPowerUpCreated && Math.random() < 0.10) {
+                            PowerUps slow = new PowerUps.SlowBallPowerUp(brick.getX(), brick.getY());
+                            powerUps.add(slow);
+                            root.getChildren().add(slow.getView());
+                            slowBallPowerUpCreated = true;
+                        }
+
+                        if (!extraLifePowerUpCreated && Math.random() < 0.10) {
+                            PowerUps extraLife = new PowerUps.ExtraLifePowerUp(brick.getX(), brick.getY());
+                            powerUps.add(extraLife);
+                            root.getChildren().add(extraLife.getView());
+                            extraLifePowerUpCreated = true;
+                        }
+                       
                     }
                 }
                 // for testing I will add unbreakable bricks in level 2 as well
@@ -387,11 +409,25 @@ public class BreakoutController extends Scoring{
                         bricks.add(brick);
                         root.getChildren().add(brick.getView());
                         
-                        if (!expandPowerUpCreated && Math.random() < 0.15) {
+                        if (!expandPowerUpCreated && Math.random() < 0.20) {
                             PowerUps p = new PowerUps.ExpandPaddlePowerUp(brick.getX(), brick.getY());
                             powerUps.add(p);
                             root.getChildren().add(p.getView());
                             expandPowerUpCreated = true;
+                        }
+                        
+                        if (!slowBallPowerUpCreated && Math.random() < 0.15) {
+                            PowerUps slow = new PowerUps.SlowBallPowerUp(brick.getX(), brick.getY());
+                            powerUps.add(slow);
+                            root.getChildren().add(slow.getView());
+                            slowBallPowerUpCreated = true;
+                        }
+                        
+                        if (!extraLifePowerUpCreated && Math.random() < 0.15) {
+                            PowerUps extraLife = new PowerUps.ExtraLifePowerUp(brick.getX(), brick.getY());
+                            powerUps.add(extraLife);
+                            root.getChildren().add(extraLife.getView());
+                            extraLifePowerUpCreated = true;
                         }
                     }
                 }
@@ -429,6 +465,7 @@ public class BreakoutController extends Scoring{
        loadLevel(currentLevel, root);
        //reset any temporary power-ups
        paddle.resetSize();
+       ball.resetSpeed();
        //reset ball and continue
        resetBall();
    }
@@ -441,5 +478,10 @@ public class BreakoutController extends Scoring{
 	        }
 	    }
 	    return true;
+	}
+   
+   //for life powerup
+   public void addLife() {
+	    lives++;
 	}
 }
