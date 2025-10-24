@@ -333,8 +333,10 @@ public class BreakoutController extends Scoring{
             if (node == paddle.getView() || node == ball.getView() || node == scoreLabel || node == livesLabel) {
                 return false;
             }
+            bricksOptional.clear();
             // remove shapes (rectangles / circles) that are not the UI/paddle/ball
             return node instanceof javafx.scene.shape.Shape;
+            
         });
 
         //make sure we create at most one power-up per level if desired
@@ -342,16 +344,23 @@ public class BreakoutController extends Scoring{
         
         switch (level) {
             case 1 -> {
-                for (int i = 0; i < 10; i++) {
-                    Brick brick = new Brick(50 + i * 50, 100, 40, 20, BRICK_COLOR, 1);
+                for (int i = 0; i < 1; i++) {
+                    Brick brick = new Brick(50 + i * 50, 100, 40, 20, 1);
                     bricks.add(brick);
+                    root.getChildren().add(brick.getView());
+                }
+
+                // for testing I will add unbreakable bricks in level 1 as well
+                for (int i = 0; i < 5; i++) {
+                    Brick brick = new BrickUnbreakable(60 + i * 55, 250, 40, 40, 3);
+                    bricksOptional.add(brick);
                     root.getChildren().add(brick.getView());
                 }
             }
             case 2 -> {
                 for (int row = 0; row < 5; row++) {
                     for (int col = 0; col < 8; col++) {
-                        Brick brick = new Brick(70 + col * 60, 80 + row * 30, 50, 20, Color.DARKRED, 1);
+                        Brick brick = new Brick(70 + col * 60, 80 + row * 30, 50, 20, 2);
                         bricks.add(brick);
                         root.getChildren().add(brick.getView());
                         
@@ -363,14 +372,18 @@ public class BreakoutController extends Scoring{
                         }
                     }
                 }
+                // for testing I will add unbreakable bricks in level 2 as well
+                for (int i = 0; i < 5; i++) {
+                    Brick brick = new BrickUnbreakable(220 + i * 55, 250, 40, 20, 3);
+                    bricksOptional.add(brick);
+                    root.getChildren().add(brick.getView());
+                }
             }
             case 3 -> {
                 for (int row = 0; row < 6; row++) {
                     for (int col = 0; col < 9; col++) {
-                        boolean obstacle = (row == 2 && col % 3 == 0);
                         Brick brick = new Brick(60 + col * 55, 80 + row * 25, 50, 20,
-                                obstacle ? Color.GRAY : BRICK_COLOR,
-                                obstacle ? Integer.MAX_VALUE : 1);
+                                3);
                         bricks.add(brick);
                         root.getChildren().add(brick.getView());
                         
@@ -381,6 +394,13 @@ public class BreakoutController extends Scoring{
                             expandPowerUpCreated = true;
                         }
                     }
+                }
+
+                // lasttly for level 3 we add a row of unbreakable bricks
+                for (int i = 0; i < 9; i++) {
+                    Brick brick = new BrickUnbreakable(60 + i * 55, 250, 50, 50, Integer.MAX_VALUE);
+                    bricksOptional.add(brick);
+                    root.getChildren().add(brick.getView());
                 }
             }
             default -> {

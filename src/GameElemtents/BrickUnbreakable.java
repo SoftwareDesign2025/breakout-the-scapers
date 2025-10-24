@@ -10,7 +10,7 @@ public class BrickUnbreakable extends Brick {
 	public BrickUnbreakable(double x, double y, double width, double height, int hp) {
 		super(x, y, width, height, hp);
 		color = ColorEditor.alterColorSaturation(.2f, color);
-		color = ColorEditor.alterColorBrightness(-.1f, color);
+		color = ColorEditor.alterColorBrightness(-.15f, color);
 		color = ColorEditor.alterColorHue(360/2, color);
 		setBrickColor(color);
 	}
@@ -29,8 +29,12 @@ public class BrickUnbreakable extends Brick {
 			// after "brick is dead" earns no points
 			this.points = 0;
 		}
-		this.isBreakDead = false;
         return isBreakDead;
+	}
+
+	@Override
+	public boolean deadBrick() {
+		return false; // unbreakable bricks are never dead
 	}
 
 

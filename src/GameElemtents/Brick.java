@@ -20,7 +20,7 @@ public class Brick extends GameObject{
         this.points = 150; 
         //makes a rectangle to visually represent the brick
         view = new Rectangle(x, y, width, height);
-        ((Rectangle) view).setFill(color);
+        setBrickColor(this.color);
         
         // if the odds are right make it
         if (Math.random() < CHANCE_FOR_POWERUP) {
@@ -34,8 +34,8 @@ public class Brick extends GameObject{
 
     // returns true if the brick is destroyed
     public boolean onHit() {
-        if (isUnbreakable()) return false;
         hp--;
+        
         color = ColorEditor.alterColorHue(15.0f, color);
         setBrickColor(color);
         this.isBreakDead = hp <= 0;
@@ -54,7 +54,9 @@ public class Brick extends GameObject{
     }
 
     public int getPoints() {
-        return points;
+        int temp = points;
+        points/=2; // half the points each time to prevent farming
+        return temp;
     }
     
     // method to handle bouncing the ball off the brick
@@ -67,6 +69,7 @@ public class Brick extends GameObject{
     // sometimes the ball bounces in the side of the brick and while is technically touching the side
     // it is already moving away from it so we dont want to reverse the velocity in that case
     private void bounceBall(Ball ball) {
+        ball.accelerate(10f); // speed up the ball slightly on each hit to make it harder and avoid softblocks
         Circle ballView = (Circle) ball.getView();
         Bounds brickBounds = this.getView().getBoundsInParent();
 
@@ -94,6 +97,11 @@ public class Brick extends GameObject{
                 ((Math.abs(ballRight - brickLeft) < Math.abs(ballBottom - brickTop) && vx > 0) ||  // hitting left side while moving right
                  (Math.abs(ballLeft - brickRight) < Math.abs(ballBottom - brickTop) && vx < 0));   // hitting right side while moving left
 
+        offsetBallPositionAcordingly(ball, 
+        ballLeft, ballRight, ballTop, ballBottom, 
+        brickLeft, brickRight, brickTop, brickBottom);
+
+        // now bounce accordingly
         if (hitVertically) {
             ball.bounceVertical();
         }
@@ -101,8 +109,28 @@ public class Brick extends GameObject{
         if (hitHorizontally) {
             ball.bounceHorizontal();
         }
+        
     }
 
+
+    private void offsetBallPositionAcordingly( Ball ball, double ballLeft, double ballRight,
+            double ballTop, double ballBottom,
+            double brickLeft, double brickRight,
+            double brickTop, double brickBottom) {
+        // ball intersects brick from the right
+        if (ballLeft > brickRight){
+            ball.offsetPositionHorizontal(brickRight - ballLeft );
+        }
+        if( ballRight < brickLeft) {
+        	ball .offsetPositionHorizontal(brickLeft - ballRight );
+        }
+        if (ballTop > brickBottom) {
+        	ball.offsetPositionVertival(brickBottom - ballTop );
+        }
+        if (ballBottom < brickTop) {
+        	ball.offsetPositionVertival(brickTop - ballBottom );
+        }
+    }
     
     public boolean deadBrick() {
         return hp <= 0;
@@ -113,13 +141,16 @@ public class Brick extends GameObject{
     	Circle b = (Circle) ball.getView();
     	
     	if (b.getBoundsInParent().intersects(this.getView().getBoundsInParent())) {
-            this.bounceBall(ball);; // bounce off the brick surface
+            bounceBall(ball); // bounce off the brick surface
             //onHit() reduces HP, returns true if brick is destroyed
             if (this.onHit()) {
-                this.deadBrick();
+                if (deadBrick()) {
+                    this.setVisible(false); // hide the brick
+                }
             }
+            return true; // brick was hit
         }
-        return false; // brick still alive
+        return false; // brick was not hit
     }
     
     private void setVisible(boolean visible) {
