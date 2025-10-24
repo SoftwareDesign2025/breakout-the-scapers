@@ -20,11 +20,12 @@ public class CollisionManager {
     //removes bricks when destroyed, and adds points
     public static void handleBallBricks(Ball ball, List<Brick> bricks, BreakoutController controller) {
         Iterator<Brick> it = bricks.iterator(); //safe way to remove while iterating
+        
         while (it.hasNext()) {
             Brick brick = it.next();
             if (brick.collideWithBall(ball)) {
             	controller.addScore(brick.getPoints());
-            };
+            }
             if (brick.deadBrick()) {
             	it.remove();
             }

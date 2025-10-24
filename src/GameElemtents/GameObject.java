@@ -25,5 +25,25 @@ public abstract class GameObject {
     	// override depending on how you want to handle interactions 
     	return false;
     }
+    
+    public double getX() {
+        if (view instanceof javafx.scene.shape.Rectangle rect) {
+            return rect.getX();
+        } else if (view instanceof javafx.scene.shape.Circle circle) {
+            return circle.getCenterX();
+        } else {
+            return view.getLayoutX(); //for other shapes
+        }
+    }
 
+    public double getY() {
+        if (view instanceof javafx.scene.shape.Rectangle rect) {
+            return rect.getY();
+        } else if (view instanceof javafx.scene.shape.Circle circle) {
+            return circle.getCenterY();
+        } else {
+            return view.getLayoutY(); //fallback
+        }
+    }
 }
+
