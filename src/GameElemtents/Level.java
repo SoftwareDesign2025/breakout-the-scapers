@@ -30,6 +30,7 @@ public class Level {
     	// TODO: create different levels based on difficulty
     }
 
+    // Util method to create a row of bricks
     private void createRowOfBricks(double yPosition, int numBricks, double brickWidth, double brickHeight, int hp) {
         for (int i = 0; i < numBricks; i++) {
             double xPosition = i * brickWidth;

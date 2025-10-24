@@ -1,9 +1,12 @@
 package GameElemtents;
 
 
+import GameUtils.BreakoutController;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 
 public class PowerUps extends GameObject {
@@ -36,4 +39,51 @@ public class PowerUps extends GameObject {
        active = false; // stop movement
        view.setVisible(false);
    }
+   
+ //to check bounds
+   public javafx.scene.Node getView() {
+	    return view;
+	}
+   
+   //powerup subclasses
+   //expands paddle
+   public static class ExpandPaddlePowerUp extends PowerUps {
+       public ExpandPaddlePowerUp(double x, double y) {
+           super(x, y, 10, Color.BLUE);
+       }
+       
+       public void applyEffect(Paddle paddle) {
+           Rectangle view = (Rectangle) paddle.getView();
+           view.setWidth(view.getWidth() * 1.5);
+       }
+   }
+   
+   //slows down the ball temporarily
+	public static class SlowBallPowerUp extends PowerUps {
+	    public SlowBallPowerUp(double x, double y) {
+	        super(x, y, 10, Color.PURPLE);
+	    }
+	
+	    public void applyEffect(Ball ball) {
+	        // reduce ball speed by 30%
+	        ball.setVelocity(ball.getVelocity().multiply(0.7));
+	    }
+	}
+	
+	//gives player an extra life
+	public static class ExtraLifePowerUp extends PowerUps {
+	    public ExtraLifePowerUp(double x, double y) {
+	        super(x, y, 10, Color.GOLD);
+	    }
+
+	    public void applyEffect(BreakoutController controller) {
+	        controller.addLife();
+	    }
+	}
+
+//   public static class MultiBallPowerUp extends PowerUps {
+//       public MultiBallPowerUp(double x, double y) {
+//           super(x, y, 10, Color.GREEN);
+//       }
+
 }
