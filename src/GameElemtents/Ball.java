@@ -10,7 +10,9 @@ public class Ball extends GameObject{
 	// keeps track of current angle
 	private double angleDegrees = 45;
     final double DEFAULT_ANGLE = 360-90;
-	private double speed = 1000;
+	
+    private final double DEFAULT_SPEED = 600;
+    private double speed = DEFAULT_SPEED;
 	private Point2D velocity;
 	
     // this method uses some trigonometry tricks to set the direction of the ball
@@ -74,6 +76,7 @@ public class Ball extends GameObject{
     public void reset(double x, double y) {
         ((Circle) view).setCenterX(x);
         ((Circle) view).setCenterY(y);
+        this.speed = DEFAULT_SPEED;
         setDirection(this.DEFAULT_ANGLE);
     }
     
@@ -95,6 +98,7 @@ public class Ball extends GameObject{
     	this.speed = newSpeed; // set new speed
     	// update velocity vector continuing with current angle
     	setDirection(this.angleDegrees);
+
     }
     
     // this implementation of collide with ball
@@ -116,7 +120,22 @@ public class Ball extends GameObject{
     // it returns nothing and takes in the amount of speed to change by as the parameter
     public void accelerate(double deltaSpeed) {
     	this.speed += deltaSpeed;
-    	update(this.speed);
+    	updateSpeed(this.speed);
+    }
+
+    public void changeAngle(double deltaAngle) {
+    	this.angleDegrees += deltaAngle;
+    	setDirection(this.angleDegrees);
+    }
+
+    public void offsetPositionHorizontal(double deltaX) {
+    	Circle c = (Circle) view;
+        c.setCenterX(c.getCenterX() + deltaX);
+    }
+
+    public void offsetPositionVertival(double deltaY) {
+    	Circle c = (Circle) view;
+        c.setCenterY(c.getCenterY() + deltaY);
     }
 
 }

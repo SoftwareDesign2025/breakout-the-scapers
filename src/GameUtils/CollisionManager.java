@@ -25,7 +25,7 @@ public class CollisionManager {
             Brick brick = it.next();
             if (brick.collideWithBall(ball)) {
             	controller.addScore(brick.getPoints());
-            };
+            }
             if (brick.deadBrick()) {
             	it.remove();
             }
