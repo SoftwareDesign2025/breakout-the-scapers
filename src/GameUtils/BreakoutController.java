@@ -434,7 +434,7 @@ public class BreakoutController extends Scoring{
 
                 // lasttly for level 3 we add a row of unbreakable bricks
                 for (int i = 0; i < 9; i++) {
-                    Brick brick = new BrickUnbreakable(60 + i * 55, 250, 50, 50, Integer.MAX_VALUE);
+                    Brick brick = new BrickUnbreakable(60 + i * 55, 250, 20, 50, 3);
                     bricksOptional.add(brick);
                     root.getChildren().add(brick.getView());
                 }
