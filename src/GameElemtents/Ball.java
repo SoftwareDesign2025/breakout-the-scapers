@@ -1,6 +1,7 @@
 package GameElemtents;
 
 
+import GameUtils.GameColors;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -14,7 +15,8 @@ public class Ball extends GameObject{
     private final double DEFAULT_SPEED = 600;
     private double speed = DEFAULT_SPEED;
 	private Point2D velocity;
-	
+	private double radius = 10;
+    private Paint color = GameColors.ACCENT_COLOR.getColor();
     // this method uses some trigonometry tricks to set the direction of the ball
     // based on the angle its moving and the speed. the math is explained in the comments
     public void setDirection(double angleDegrees){
@@ -34,6 +36,11 @@ public class Ball extends GameObject{
 
 	//constructor for a ball with position, radius, and color
     public Ball(double x, double y, double radius, Paint color) {
+        view = new Circle(x, y, radius, color);
+        setDirection(DEFAULT_ANGLE);
+    }
+
+    public Ball(double x, double y) {
         view = new Circle(x, y, radius, color);
         setDirection(DEFAULT_ANGLE);
     }
@@ -79,14 +86,7 @@ public class Ball extends GameObject{
         this.speed = DEFAULT_SPEED;
         setDirection(this.DEFAULT_ANGLE);
     }
-    
-    public double getX() {
-        return ((Circle) view).getCenterX();
-    }
 
-    public double getY() {
-        return ((Circle) view).getCenterY();
-    }
     
     // method to get velocity of ball
     public Point2D getVelocity() {
@@ -95,7 +95,7 @@ public class Ball extends GameObject{
     
     //especially for powerups
     public void setVelocity(Point2D newVelocity) {
-        this.velocity = newVelocity;
+        updateSpeed(newVelocity.magnitude());
     }
     
     // method to update speed of ball
@@ -145,7 +145,16 @@ public class Ball extends GameObject{
     
     public void resetSpeed() {
         // reset to your initial speed, e.g.:
-        velocity = new Point2D(200, -200);
+        updateSpeed(DEFAULT_SPEED);
     }
 
+    @Override
+    public double getX() {
+    return ((Circle) view).getCenterX();
+    }
+
+    @Override
+    public double getY() {
+    return ((Circle) view).getCenterY();
+    }   
 }
