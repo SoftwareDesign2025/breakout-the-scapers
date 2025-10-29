@@ -22,8 +22,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import GameElemtents.PowerUps;
 
-
 public class BreakoutController {
+
 	private final Paint PADDLE_COLOR = GameColors.PRIMARY_COLOR.getColor();
     public static final int PADDLE_SPEED = 10;
     private ScoreKeeper scoreKeeper = new ScoreKeeper();
@@ -435,7 +435,7 @@ public class BreakoutController {
 
                 // lasttly for level 3 we add a row of unbreakable bricks
                 for (int i = 0; i < 9; i++) {
-                    Brick brick = new BrickUnbreakable(60 + i * 55, 250, 50, 50, Integer.MAX_VALUE);
+                    Brick brick = new BrickUnbreakable(60 + i * 55, 250, 20, 50, 3);
                     bricksOptional.add(brick);
                     root.getChildren().add(brick.getView());
                 }
