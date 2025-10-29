@@ -35,7 +35,6 @@ public class Main extends Application{
         stage.setScene(myScene);
         stage.setTitle(TITLE); 
         stage.show();
-        
  
         //game loop
         //KeyFrame calls step() repeatedly at a constant time interval
@@ -47,7 +46,6 @@ public class Main extends Application{
         animation.setCycleCount(Timeline.INDEFINITE);// loop forever
         animation.getKeyFrames().add(frame);
         animation.play();
-        
         
         myController.setAnimation(animation);
     }
