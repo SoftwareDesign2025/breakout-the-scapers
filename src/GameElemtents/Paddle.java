@@ -1,6 +1,7 @@
 package GameElemtents;
 
 
+import GameUtils.GameColors;
 import javafx.geometry.Bounds;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -10,12 +11,12 @@ import javafx.stage.Window;
 //represents the paddle controlled by the player
 //paddle can only move left and right 
 public class Paddle extends GameObject{
-	private double speed = 800;
+	private double speed = 1200;
 	private boolean moveLeft = false;
 	private boolean moveRight = false;
 	private boolean outOfBoundsLeft = false;
 	private boolean outOfBoundsRight = false;
-	
+	private Paint color = GameColors.PRIMARY_COLOR.getColor();
 	private double originalWidth; //for level change and powerups
 	
     public Paddle(double x, double y, double width, double height, Paint color) {
@@ -24,6 +25,12 @@ public class Paddle extends GameObject{
         ((Rectangle) view).setFill(color);
         this.originalWidth = width;  // store the starting size
     }
+	public Paddle(double x, double y, double width, double height) {
+		//makes a visual paddle as a rectangle
+		view = new Rectangle(x, y, width, height);
+		((Rectangle) view).setFill(color);
+		this.originalWidth = width;  // store the starting size
+	}
 
     @Override
     public void update(double elapsedTime) {

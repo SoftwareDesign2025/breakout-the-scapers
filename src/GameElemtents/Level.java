@@ -2,6 +2,7 @@ package GameElemtents;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.Group;
 
 
 import javafx.scene.text.Text;
@@ -36,6 +37,16 @@ public class Level {
             double xPosition = i * brickWidth;
             Brick brick = new Brick(xPosition, yPosition, brickWidth, brickHeight, hp);
             bricks.add(brick);
+        }
+    }
+
+    
+    private void brickMakerUbreakable(int yaxis, Group root) {
+        for (int i = 0; i < 10; i++) {
+            Brick brick = new BrickUnbreakable(50 + i * 50, yaxis, 40, 20, 3);
+            bricks.add(brick);
+            //add visual node to scene
+            root.getChildren().add(brick.getView());
         }
     }
 	
