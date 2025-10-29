@@ -201,8 +201,8 @@ public class BreakoutController extends Scoring{
 
         //collisions with ball paddle/bricks
         CollisionManager.handleBallPaddle(balls, paddles);
-        CollisionManager.handleBallBricks(balls, bricks, this);
-        CollisionManager.handleBallBricks(balls, bricksOptional, this);
+        addScore(CollisionManager.handleBallBricks(balls, bricks));
+        addScore(CollisionManager.handleBallBricks(balls, bricksOptional));
 
         //move the ball based on its velocity and the elapsed frame time
         for (Ball ball : balls) {
