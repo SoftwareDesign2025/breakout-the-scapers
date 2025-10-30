@@ -2,6 +2,7 @@ package GameElemtents;
 
 import GameUtils.ColorEditor;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -159,6 +160,14 @@ public class Brick extends GameObject{
 
 	public int getHP() {
 		return this.hp;
+	}
+	
+	//helpers influencing power-up spawns
+	public Point2D getCenter() {
+	    Rectangle rect = (Rectangle) view;
+	    double centerX = rect.getX() + rect.getWidth() / 2;
+	    double centerY = rect.getY() + rect.getHeight() / 2;
+	    return new Point2D(centerX, centerY);
 	}
 
 }

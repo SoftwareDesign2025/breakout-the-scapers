@@ -123,11 +123,8 @@ public class Paddle extends GameObject{
 	
 	// resets paddle width to original when a new level starts
 	public void resetSize() {
-	    Rectangle rect = (Rectangle) getView();
-	    double currentWidth = rect.getWidth();
-	    double diff = currentWidth - originalWidth;
+		Rectangle rect = (Rectangle) view;
 	    rect.setWidth(originalWidth);
-	    rect.setX(rect.getX() + diff / 2); // re-center after shrinking back
 	}
 
 }
