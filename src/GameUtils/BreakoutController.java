@@ -21,6 +21,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import GameElemtents.PowerUps;
 
+import GameUtils.Level;
+
+
 //score keeper
 public class BreakoutController extends Scoring{
     
@@ -30,7 +33,7 @@ public class BreakoutController extends Scoring{
     private List<Paddle> paddles;
     private List<Ball> balls; 
     private List<Brick> bricks;
-    private List<Brick> bricksOptional;
+    private List<Brick> unbreakableBricks;
 
     private int score;
     private int lives;
@@ -52,6 +55,7 @@ public class BreakoutController extends Scoring{
     //level fields
     private int currentLevel = 1;
     private static final int MAX_LEVELS = 3;
+    private List<Level> levels = new ArrayList<>();
     
     public void setAnimation(Timeline animation) {
         this.animation = animation;
@@ -68,14 +72,14 @@ public class BreakoutController extends Scoring{
         
         //create bricks
         bricks = new ArrayList<>();
-        bricksOptional = new ArrayList<>();
+        unbreakableBricks = new ArrayList<>();
 
         score = 0;
         lives = LIVES_START;
         //track current level
         int currentLevel = 1;
 
-        //call helper to load level layout dynamically
+        loadAllLevels();
         loadLevel(currentLevel, root);
         setTextAndLabels();
         
@@ -83,8 +87,20 @@ public class BreakoutController extends Scoring{
     }
 
     private void resetBallsPaddles(){
-        //change 200 back to 100
-        Paddle paddle = new Paddle(width / 2 - 50, height - 50, 200, 15);
+    	//remove old paddle nodes
+        if (paddles != null) {
+            for (Paddle p : paddles) {
+                root.getChildren().remove(p.getView());
+            }
+        }
+        //removes ball for new one to be placed
+        if (balls != null) {
+            for (Ball b : balls) {
+                root.getChildren().remove(b.getView());
+            }
+        }
+        
+        Paddle paddle = new Paddle(width / 2 - 50, height - 50, 100, 15); //change 200 back to 100
         paddles = new ArrayList<>();
         paddles.add(paddle);
         //create ball at the center of screen
@@ -201,8 +217,9 @@ public class BreakoutController extends Scoring{
 
         //collisions with ball paddle/bricks
         CollisionManager.handleBallPaddle(balls, paddles);
-        addScore(CollisionManager.handleBallBricks(balls, bricks));
-        addScore(CollisionManager.handleBallBricks(balls, bricksOptional));
+        CollisionManager.handleBallBricks(balls, bricks, this);
+        CollisionManager.handleBallBricks(balls, unbreakableBricks, this);
+
 
         //move the ball based on its velocity and the elapsed frame time
         for (Ball ball : balls) {
@@ -302,8 +319,22 @@ public class BreakoutController extends Scoring{
     }
     
     //level generator
-    private void loadLevel(int level, Group root ) {
-    	//remove previous power-up nodes from scene (important: do this BEFORE clearing the list)
+    //to be called once during initialization in createRoot
+    private void loadAllLevels() {
+        levels.clear();
+        levels.add(LevelBuilder.createLevel1(GameColors.SECONDARY_COLOR.getColor()));
+        levels.add(LevelBuilder.createLevel2());
+        levels.add(LevelBuilder.createLevel3(GameColors.SECONDARY_COLOR.getColor()));
+    }
+
+    // new loadLevel which uses Level objects
+    private void loadLevel(int levelNumber, Group root) {
+        // defensive bounds
+        if (levelNumber < 1) levelNumber = 1;
+        if (levels.isEmpty()) loadAllLevels();
+        if (levelNumber > levels.size()) levelNumber = levels.size();
+
+        // remove old powerups & bricks (keep paddles/balls/UI)
         if (powerUps != null) {
             for (PowerUps pu : powerUps) {
                 if (pu != null && pu.getView() != null) {
@@ -311,155 +342,54 @@ public class BreakoutController extends Scoring{
                 }
             }
         }
-        // now clear the list
         powerUps.clear();
 
-        //clear bricks (and remove their nodes)
         if (bricks != null) {
             for (Brick b : bricks) {
-                if (b != null && b.getView() != null) {
-                    root.getChildren().remove(b.getView());
-                }
+                if (b != null && b.getView() != null) root.getChildren().remove(b.getView());
             }
         }
         bricks.clear();
 
-        //remove any leftover rectangles (old bricks) but keep paddle/ball/labels
-        root.getChildren().removeIf(node -> {
-
-            // keep paddle and ball and UI texts
-            if (node == scoreLabel || node == livesLabel) {
-                return false;
-            }
-            bricksOptional.clear();
-            // remove shapes (rectangles / circles) that are not the UI/paddle/ball
-            return node instanceof javafx.scene.shape.Shape;
-            
-        });
-
-        //make sure we create at most one powerup per level
-        boolean expandPowerUpCreated = false;
-        boolean slowBallPowerUpCreated = false;
-        boolean extraLifePowerUpCreated = false;
-
-        switch (level) {
-            case 1 -> {
-                for (int i = 0; i < 1; i++) {
-                    Brick brick = new Brick(50 + i * 50, 100, 40, 20, 1);
-                    bricks.add(brick);
-                    root.getChildren().add(brick.getView());
-                }
-
-                // for testing I will add unbreakable bricks in level 1 as well
-                for (int i = 0; i < 5; i++) {
-                    Brick brick = new BrickUnbreakable(60 + i * 55, 250, 40, 40, 3);
-                    bricksOptional.add(brick);
-                    root.getChildren().add(brick.getView());
-                }
-            }
-            case 2 -> {
-                for (int row = 0; row < 5; row++) {
-                    for (int col = 0; col < 8; col++) {
-                        Brick brick = new Brick(70 + col * 60, 80 + row * 30, 50, 20, 2);
-                        bricks.add(brick);
-                        root.getChildren().add(brick.getView());
-                        
-                        if (!expandPowerUpCreated && Math.random() < 0.15) {
-                            PowerUps p = new PowerUps.ExpandPaddlePowerUp(brick.getX(), brick.getY());
-                            powerUps.add(p);
-                            root.getChildren().add(p.getView());
-                            expandPowerUpCreated = true;
-                        }
-                        if (!slowBallPowerUpCreated && Math.random() < 0.10) {
-                            PowerUps slow = new PowerUps.SlowBallPowerUp(brick.getX(), brick.getY());
-                            powerUps.add(slow);
-                            root.getChildren().add(slow.getView());
-                            slowBallPowerUpCreated = true;
-                        }
-
-                        if (!extraLifePowerUpCreated && Math.random() < 0.10) {
-                            PowerUps extraLife = new PowerUps.ExtraLifePowerUp(brick.getX(), brick.getY());
-                            powerUps.add(extraLife);
-                            root.getChildren().add(extraLife.getView());
-                            extraLifePowerUpCreated = true;
-                        }
-                       
-                    }
-                }
-                // for testing I will add unbreakable bricks in level 2 as well
-                for (int i = 0; i < 5; i++) {
-                    Brick brick = new BrickUnbreakable(220 + i * 55, 250, 40, 20, 3);
-                    bricksOptional.add(brick);
-                    root.getChildren().add(brick.getView());
-                }
-            }
-            case 3 -> {
-                for (int row = 0; row < 6; row++) {
-                    for (int col = 0; col < 9; col++) {
-                        Brick brick = new Brick(60 + col * 55, 80 + row * 25, 50, 20,
-                                3);
-                        bricks.add(brick);
-                        root.getChildren().add(brick.getView());
-                        
-                        if (!expandPowerUpCreated && Math.random() < 0.20) {
-                            PowerUps p = new PowerUps.ExpandPaddlePowerUp(brick.getX(), brick.getY());
-                            powerUps.add(p);
-                            root.getChildren().add(p.getView());
-                            expandPowerUpCreated = true;
-                        }
-                        
-                        if (!slowBallPowerUpCreated && Math.random() < 0.15) {
-                            PowerUps slow = new PowerUps.SlowBallPowerUp(brick.getX(), brick.getY());
-                            powerUps.add(slow);
-                            root.getChildren().add(slow.getView());
-                            slowBallPowerUpCreated = true;
-                        }
-                        
-                        if (!extraLifePowerUpCreated && Math.random() < 0.15) {
-                            PowerUps extraLife = new PowerUps.ExtraLifePowerUp(brick.getX(), brick.getY());
-                            powerUps.add(extraLife);
-                            root.getChildren().add(extraLife.getView());
-                            extraLifePowerUpCreated = true;
-                        }
-                    }
-                }
-
-                // lasttly for level 3 we add a row of unbreakable bricks
-                for (int i = 0; i < 9; i++) {
-                    Brick brick = new BrickUnbreakable(60 + i * 55, 250, 20, 50, 3);
-                    bricksOptional.add(brick);
-                    root.getChildren().add(brick.getView());
-                }
-            }
-            default -> {
-                // fallback: treat as level 1
-                loadLevel(1, root);
+        if (unbreakableBricks != null) {
+            for (Brick b : unbreakableBricks) {
+                if (b != null && b.getView() != null) root.getChildren().remove(b.getView());
             }
         }
-    
+        unbreakableBricks.clear();
+
+        // remove leftover shapes but keep paddles/balls/labels
+        root.getChildren().removeIf(node -> {
+            if (node == scoreLabel || node == livesLabel) return false;
+            if (paddles != null && paddles.stream().anyMatch(p -> p.getView() == node)) return false;
+            if (balls != null && balls.stream().anyMatch(b -> b.getView() == node)) return false;
+            // else remove old shapes
+            return node instanceof javafx.scene.shape.Shape;
+        });
+
+        // populate from Level object
+        Level level = levels.get(levelNumber - 1);
+        level.populate(root, bricks, unbreakableBricks, powerUps);
+        
+
+        // reset paddles and balls for the level
         resetBallsPaddles();
+        for (Paddle p : paddles) {
+            p.resetSize();
+        }
     }
     
 
 
     //called when all bricks are cleared to progress to next level.
-   private void nextLevel() {
-	   currentLevel++;
-       System.out.println("Level cleared! Loading next level: " + currentLevel);
-       
-       if (currentLevel > MAX_LEVELS) {
-           win_game();
-           return;
-       }
-
-       //load the next level
-       loadLevel(currentLevel, root);
-       //reset any temporary power-ups
-       for (Paddle paddle : paddles){
-        paddle.resetSize();
-       }
-
-   }
+    private void nextLevel() {
+        currentLevel++;
+        if (currentLevel > levels.size()) {
+            win_game();
+            return;
+        }
+        loadLevel(currentLevel, root);
+    }
    
    //to check if all removable bricks are removed
    private boolean allBreakableBricksCleared() {
