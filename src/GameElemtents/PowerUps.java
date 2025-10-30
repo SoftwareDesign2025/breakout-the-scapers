@@ -26,7 +26,8 @@ public class PowerUps extends GameObject {
 	@Override
 	public void update(double elapsedTime) {
         if (active) {
-            view.setTranslateY(view.getTranslateY() + velocity.getY() * elapsedTime);
+        	Circle c = (Circle) view;
+        	c.setCenterY(c.getCenterY() + velocity.getY() * elapsedTime);
         }
 		
 	}
