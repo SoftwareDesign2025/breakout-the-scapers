@@ -100,8 +100,7 @@ public class BreakoutController extends Scoring{
             }
         }
         
-        //change 200 back to 100
-        Paddle paddle = new Paddle(width / 2 - 50, height - 50, 200, 15);
+        Paddle paddle = new Paddle(width / 2 - 50, height - 50, 100, 15); //change 200 back to 100
         paddles = new ArrayList<>();
         paddles.add(paddle);
         //create ball at the center of screen
