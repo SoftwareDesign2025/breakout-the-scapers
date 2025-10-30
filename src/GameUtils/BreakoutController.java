@@ -254,7 +254,6 @@ public class BreakoutController extends Scoring{
         //if ball falls below the screen, lose a life and reset ball
         for (Ball ball : balls)
         {
-            System.out.println(ball.getY());
             if (ball.getY() > height) {
             lives--;
             resetBall(ball);
