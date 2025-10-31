@@ -21,11 +21,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import GameElemtents.PowerUps;
 
-import GameUtils.Level;
+public class BreakoutController {
 
-
-//score keeper
-public class BreakoutController extends Scoring{
+	private final Paint PADDLE_COLOR = GameColors.PRIMARY_COLOR.getColor();
+    public static final int PADDLE_SPEED = 10;
+    private ScoreKeeper scoreKeeper = new ScoreKeeper();
     
     
     public final int LIVES_START = 3;
@@ -40,6 +40,7 @@ public class BreakoutController extends Scoring{
     private Text scoreLabel;
     private Text livesLabel;
     private Color textColor = GameColors.TEXT_COLOR.getColor(); 
+    
     
     
     private double width;
@@ -130,7 +131,7 @@ public class BreakoutController extends Scoring{
 
     // makes the stage that shows the player the game has been won 
     private void win_game() {
-    	System.out.println(readLastNumberFromFile());
+    	System.out.println(scoreKeeper.readLastNumberFromFile());
         try {
             if (animation != null) {
                 animation.stop(); // Stop the game loop
@@ -147,10 +148,9 @@ public class BreakoutController extends Scoring{
             
             Label oldScoreLabel = (Label) root.lookup("#prevHigh");
             
-            System.out.println(readLastNumberFromFile());
-            System.out.println(score);
+
         
-        	checkHighScore(score);
+            scoreKeeper.checkHighScore(score);
         	oldScoreLabel.setText("High Score is: " + score);
             
             
@@ -159,7 +159,7 @@ public class BreakoutController extends Scoring{
             Scene scene = new Scene(root, 600, 800);
             stage.setScene(scene);
             stage.show();
-            System.out.println(readLastNumberFromFile());
+            System.out.println(scoreKeeper.readLastNumberFromFile());
             Button exitButton = (Button) root.lookup("#exitButton");
             exitButton.setOnAction(e -> stage.close());
 
@@ -190,11 +190,11 @@ public class BreakoutController extends Scoring{
             Label oldScoreLabel = (Label) root.lookup("#prevHigh");
             
             
-            System.out.println(readLastNumberFromFile());
+            System.out.println(scoreKeeper.readLastNumberFromFile());
             System.out.println(score);
             
-        	checkHighScore(score);
-        	oldScoreLabel.setText("High Score is: " + readLastNumberFromFile());
+            scoreKeeper.checkHighScore(score);
+        	oldScoreLabel.setText("High Score is: " + scoreKeeper.readLastNumberFromFile());
       
             
             

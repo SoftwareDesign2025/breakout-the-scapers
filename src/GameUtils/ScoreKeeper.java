@@ -7,21 +7,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 
-
-public class Scoring {
+// This class is in charge of maintaining and updating the high scores from the player when the game ends
+public class ScoreKeeper {
     private final static String FILE_NAME = "Scores.txt";
 
     
-    
-    public static Integer readLastNumberFromFile()  {
-    	int n = 1;
+    // reads the last high score saved inside of the Scores.txt file 
+    public int readLastNumberFromFile()  {
+    	int nScores = 1;
     	
         LinkedList<String> lines = new LinkedList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
-                if (lines.size() > n) {
+                if (lines.size() > nScores) {
                     lines.removeFirst();
                 }
             }
@@ -37,7 +37,7 @@ public class Scoring {
     
     
 
-
+    // takes in the players end game score after winning/losing and compares it to the high score saved in Scores.txt and updates accordingly
     public void checkHighScore(int newScore) {
     	int oldScore = readLastNumberFromFile();
     	System.out.println(oldScore + " Is the Old Score");
