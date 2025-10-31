@@ -7,10 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 
 public abstract class GameObject {
-	//for a brick, it is a rectangle,for a Ball, it is a circle, for 
-	//a paddle, this is a rectangle
-	//the type is node because node is the superclass for all 
-	//javafx objects.
+
+    // default color for game objects is secondary color
     protected Color color = GameColors.SECONDARY_COLOR.getColor();
     protected Node view; //javafx node representing this object
     
@@ -27,23 +25,11 @@ public abstract class GameObject {
     }
     
     public double getX() {
-        if (view instanceof javafx.scene.shape.Rectangle rect) {
-            return rect.getX();
-        } else if (view instanceof javafx.scene.shape.Circle circle) {
-            return circle.getCenterX();
-        } else {
-            return view.getLayoutX(); //for other shapes
-        }
+        return view.getLayoutX();
     }
 
     public double getY() {
-        if (view instanceof javafx.scene.shape.Rectangle rect) {
-            return rect.getY();
-        } else if (view instanceof javafx.scene.shape.Circle circle) {
-            return circle.getCenterY();
-        } else {
-            return view.getLayoutY(); //fallback
-        }
+        return view.getLayoutY(); 
     }
 }
 
