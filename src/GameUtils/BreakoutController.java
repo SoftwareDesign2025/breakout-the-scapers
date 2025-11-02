@@ -22,8 +22,7 @@ import javafx.stage.Stage;
 import GameElemtents.PowerUps;
 
 public class BreakoutController {
-
-	private final Paint PADDLE_COLOR = GameColors.PRIMARY_COLOR.getColor();
+    
     public static final int PADDLE_SPEED = 10;
     private ScoreKeeper scoreKeeper = new ScoreKeeper();
     
@@ -217,9 +216,8 @@ public class BreakoutController {
 
         //collisions with ball paddle/bricks
         CollisionManager.handleBallPaddle(balls, paddles);
-        CollisionManager.handleBallBricks(balls, bricks, this);
-        CollisionManager.handleBallBricks(balls, unbreakableBricks, this);
-
+        addScore(CollisionManager.handleBallBricks(balls, bricks));
+        addScore(CollisionManager.handleBallBricks(balls, unbreakableBricks));
 
         //move the ball based on its velocity and the elapsed frame time
         for (Ball ball : balls) {
