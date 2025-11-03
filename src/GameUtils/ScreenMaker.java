@@ -14,14 +14,8 @@ import javafx.stage.Stage;
 public class ScreenMaker {
 	
 	
-	private int screenLen;
-	private int screenWidth;
-	
-	
-	public ScreenMaker(int screenLen, int screenWidth) {
-		this.screenLen = screenLen;
-		this.screenWidth = screenWidth;
-	}
+	public static final int SCREENWIDTH = 600;
+	public static final int SCREENHEIGHT = 800;
 	
 	
     // makes the stage that shows the player the game has been won 
@@ -50,7 +44,7 @@ public class ScreenMaker {
             
             
             Stage stage = (Stage) scoreLabel.getScene().getWindow();
-            Scene scene = new Scene(root, screenWidth, screenLen);
+            Scene scene = new Scene(root, SCREENWIDTH, SCREENHEIGHT);
             stage.setScene(scene);
             stage.show();
             System.out.println(scoreKeeper.readLastNumberFromFile());
@@ -92,7 +86,7 @@ public class ScreenMaker {
             
             
             Stage stage = (Stage) scoreLabel.getScene().getWindow();
-            Scene scene = new Scene(root, screenWidth, screenLen);
+            Scene scene = new Scene(root, SCREENWIDTH, SCREENHEIGHT);
             stage.setScene(scene);
             stage.show();
 

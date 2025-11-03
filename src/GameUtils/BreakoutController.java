@@ -41,7 +41,7 @@ public class BreakoutController {
     private Color textColor = GameColors.TEXT_COLOR.getColor(); 
     
     
-    private ScreenMaker screenMaker = new ScreenMaker(800,600);
+    private ScreenMaker screenMaker = new ScreenMaker();
     private double width;
     private double height;
     
