@@ -1,5 +1,6 @@
 import GameUtils.BreakoutController;
 import GameUtils.GameColors;
+import GameUtils.ScreenMaker;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -11,16 +12,17 @@ import javafx.util.Duration;
 
 public class Startgame extends Application{
 	//for animations and window
-		public static final int WIDTH = 600;
-		public static final int HEIGHT = 800;
-		public static final int FRAMES_PER_SECOND = 60;
-		public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-		public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+	
+		private ScreenMaker screenMaker = new ScreenMaker();
+
+		public  final int FRAMES_PER_SECOND = 60;
+		public  final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+		public  final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 	    //for window appearance
-		public static final String TITLE = "Breakout Game";
-		public static final Paint BACKGROUND = GameColors.BACKGROUND.getColor();
+		public  final String TITLE = "Breakout Game";
+		public  final Paint BACKGROUND = GameColors.BACKGROUND.getColor();
 	    
-		public static final int SIZE = 400;
+		public  final int SIZE = 400;
 
 	    //game state
 	    private Scene myScene;
@@ -29,7 +31,7 @@ public class Startgame extends Application{
 	    @Override
 	    public void start(Stage stage) {
 	        myController = new BreakoutController(); //
-	        myScene = setupScene(WIDTH, HEIGHT, BACKGROUND);
+	        myScene = setupScene(screenMaker.SCREENWIDTH, screenMaker.SCREENHEIGHT, BACKGROUND);
 	        stage.setScene(myScene);
 	        stage.setTitle(TITLE); 
 	        stage.show();
@@ -74,6 +76,8 @@ public class Startgame extends Application{
 	        return scene;
 	    }
 	    
+	    
+	    // running the program
 	    public void launch_game(String[] argStrings) {
 	    	launch(argStrings);
 	    }
