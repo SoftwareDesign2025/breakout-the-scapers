@@ -22,14 +22,15 @@ public class CollisionManager {
 
 	//checks collisions between the ball and all bricks
     //removes bricks when destroyed, and adds points
-    public static void handleBallBricks(List<Ball> balls, List<Brick> bricks, BreakoutController controller) {
+    // returns the total points scored
+    public static int handleBallBricks(List<Ball> balls, List<Brick> bricks) {
         Iterator<Brick> it = bricks.iterator(); //safe way to remove while iterating
-        
+        int score = 0;
         while (it.hasNext()) {
             for (Ball ball : balls) {
                 Brick brick = it.next();
                 if (brick.collideWithBall(ball)) {
-                    controller.addScore(brick.getPoints());
+                    score += brick.getPoints();
                 }
                 if (brick.deadBrick()) {
                     it.remove();
@@ -37,6 +38,7 @@ public class CollisionManager {
             }
             
         }
+        return score;
     }
     
     public static void handleBallBall(List<Ball> balls) {
