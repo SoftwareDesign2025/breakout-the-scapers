@@ -1,5 +1,7 @@
 package GameUtils;
 
+import java.io.IOException;
+
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -103,7 +105,16 @@ public class ScreenMaker {
 
     }
     
-    public void pickGame(Timeline animation, int score, ScoreKeeper scoreKeeper, Text scoreLabel) {}
+    public void pickGame(Timeline animation) {
+    	
+        try {
+        	FXMLLoader loader = new FXMLLoader(getClass().getResource("StartChooseScreen.fxml"));
+			Parent root = loader.load();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
     
     
     
