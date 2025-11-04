@@ -1,9 +1,9 @@
 package GameUtils;
+import GalagaGameElemtentsEnemies.EnemyFast;
 import GameElemtents.Brick;
 import GameElemtents.BrickUnbreakable;
 import GameElemtents.PowerUps;
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 
@@ -17,7 +17,7 @@ public class LevelBuilder {
         Level level = new Level();
         // simple single row
         for (int i = 0; i < 10; i++) {
-        	level.bricks.add(new Brick(50 + i * 50, 100, 40, 20, (int)1));
+        	level.bricks.add(new EnemyFast(50 + i * 50, 100, 40, 20, (int)1));
         }
         //if wanted to add a single expand power-up attached to a particular brick:
 //        if (!level.bricks.isEmpty()) {
