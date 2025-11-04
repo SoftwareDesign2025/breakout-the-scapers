@@ -74,7 +74,7 @@ public class LevelBuilder {
                 Brick brick;
                 
                 if (obstacle) {
-                	brick = new BrickUnbreakable(60 + col * 55, 80 + row * 25, 50, 20, 99999);
+                	brick = new BrickUnbreakable(60 + col * 55, 80 + row * 25, 50, 20, 3);
                     level.unbreakableBricks.add((BrickUnbreakable) brick);
                 } else {
                 	brick = new Brick(60 + col * 55, 80 + row * 25, 50, 20, 3);
