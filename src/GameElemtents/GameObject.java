@@ -32,20 +32,14 @@ public abstract class GameObject {
     }
     
     // Returns the top-left X position of the paddle
-    // Overrides GameObject.getX() to account for translations
     public double getX() {
-        // Rectangle is at (0,0) in local coordinates
-        // Final position = layoutX + translateX + rect.getX()
-        // Since rect.getX() = 0, it's: layoutX + translateX
+        // Final position = layoutX + translateX
         return view.getLayoutX() + view.getTranslateX();
     }
 
-    // Returns the top-left Y position of the paddle
-    // Overrides GameObject.getY() to account for translations
+    // Returns the top-left Y position of the object
     public double getY() {
-        // Rectangle is at (0,0) in local coordinates
-        // Final position = layoutY + translateY + rect.getY()
-        // Since rect.getY() = 0, it's: layoutY + translateY
+        // Final position = layoutY + translateY
         return view.getLayoutY() + view.getTranslateY();
     }
 
@@ -75,6 +69,7 @@ public abstract class GameObject {
     // Loads an image from imagePath and replaces the view with an ImageView
     // Uses the view's bounds to determine size, avoiding type-specific casting
     protected void loadImage() {
+        this.color = Color.TRANSPARENT; // Set color to transparent when using an image
         if (imagePath != null && !imagePath.isEmpty()) {
             try {
                 Image image = new Image(imagePath);

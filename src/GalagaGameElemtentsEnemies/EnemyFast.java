@@ -1,5 +1,6 @@
 package GalagaGameElemtentsEnemies;
 
+import java.awt.Color;
 import javafx.scene.Group;
 
 public class EnemyFast extends EnemyBase {
