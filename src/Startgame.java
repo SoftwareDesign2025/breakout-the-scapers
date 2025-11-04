@@ -6,10 +6,17 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
+
+
+
+// this was once a part of main but moved out and does the setup for our games
 public class Startgame extends Application{
 	//for animations and window
 	
@@ -27,9 +34,36 @@ public class Startgame extends Application{
 	    //game state
 	    private Scene myScene;
 	    private BreakoutController myController;
-
+	    
+	    
+	    
+	    // start menu for our users (PLEASE NOTE: I need logic for starting Galaga so I can a button for it)
 	    @Override
 	    public void start(Stage stage) {
+	    	   // Create a button
+	        Button startButton = new Button("Start Breakout");
+	        
+	        // Set action to start the game
+	        startButton.setOnAction(e -> startBreakout(stage));
+	        
+	        //un-comment if a startGalaga is added
+	        
+	        // Button startButtonGalaga = new Button("Start Galaga");
+	        // startButtonGalaga.setOnAction(e -> startGalaga(stage))
+	        
+	        // Put the button in a layout
+	        StackPane root = new StackPane(startButton);
+	        Scene scene = new Scene(root, screenMaker.SCREENWIDTH, screenMaker.SCREENHEIGHT);
+	        
+	        stage.setScene(scene);
+	        stage.setTitle("Breakout Launcher");
+	        stage.show();
+	    }
+	    
+	    
+	    // start breakout controller 
+	    private void startBreakout(Stage stage) {
+	    	
 	        myController = new BreakoutController(); //
 	        myScene = setupScene(screenMaker.SCREENWIDTH, screenMaker.SCREENHEIGHT, BACKGROUND);
 	        stage.setScene(myScene);
@@ -49,6 +83,8 @@ public class Startgame extends Application{
 	        
 	        myController.setAnimation(animation);
 	    }
+
+	    
 
 	    //create the scene and connects keyboard input to paddle movement
 	    private Scene setupScene(int width, int height, Paint background) {
