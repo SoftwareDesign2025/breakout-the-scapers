@@ -10,9 +10,9 @@ import javafx.scene.shape.Circle;
 public class Ball extends GameObject{
 	// keeps track of current angle
 	private double angleDegrees = 45;
-    final double DEFAULT_ANGLE = 360-90;
+    final double DEFAULT_ANGLE = 360-90-90-90;
 	
-    private final double DEFAULT_SPEED = 600;
+    private final double DEFAULT_SPEED = 300;
     private double speed = DEFAULT_SPEED;
 	private Point2D velocity;
 	private double radius = 10;
@@ -36,36 +36,41 @@ public class Ball extends GameObject{
 
 	//constructor for a ball with position, radius, and color
     public Ball(double x, double y, double radius, Paint color) {
-        view = new Circle(x, y, radius, color);
+        this(x, y);
+        this.radius = radius;
+        this.color = color;
         setDirection(DEFAULT_ANGLE);
     }
 
     public Ball(double x, double y) {
-        view = new Circle(x, y, radius, color);
+        view = new Circle(0, 0, radius, color);
+        view.setTranslateX(x);
+        view.setTranslateY(y);
         setDirection(DEFAULT_ANGLE);
     }
 
-    //update ball position based on velocity and elapsed time
+    //update ball position based on velocity and elapsed time it assumes the wall of the screen is at x=0 and x=600
     @Override
     public void update(double elapsedTime) {
-    	Circle c = (Circle) view;
-        c.setCenterX(c.getCenterX() + velocity.getX() * elapsedTime);
-        c.setCenterY(c.getCenterY() + velocity.getY() * elapsedTime);
+
+        offsetPositionHorizontal( velocity.getX() * elapsedTime);
+        offsetPositionVertival(velocity.getY() * elapsedTime);
 
         // bounce off left/right walls
-        if (c.getCenterX() <= c.getRadius() || c.getCenterX() >= 600 - c.getRadius()) {
+        if (this.getX() <= this.radius || this.getX() >= 600 - this.radius ) {
             velocity = new Point2D(-velocity.getX(), velocity.getY());
-            if (c.getCenterX() <= c.getRadius() ) {
-            	c.setCenterX(c.getRadius());
+            if (this.getX() <= this.radius ) {
+            	offsetPositionHorizontal(this.radius - this.getX());
             }
             else {
-            	c.setCenterX(600 - c.getRadius());
+            	offsetPositionHorizontal(-(this.getX() - (600 - this.radius)));
             }
         }
 
         // bounce off top
-        if (c.getCenterY() <= c.getRadius()) {
-            velocity = new Point2D(velocity.getX(), -velocity.getY());
+        if (this.getY() <= this.radius) {
+           bounceVertical();
+           offsetPositionVertival(this.radius - this.getY());
         }
     }
 
@@ -81,8 +86,8 @@ public class Ball extends GameObject{
 
     // this method sets the position of the value to the x and y cordinates given
     public void reset(double x, double y) {
-        ((Circle) view).setCenterX(x);
-        ((Circle) view).setCenterY(y);
+        view.setTranslateX(x);
+        view.setTranslateY(y);
         this.speed = DEFAULT_SPEED;
         setDirection(this.DEFAULT_ANGLE);
     }
@@ -110,10 +115,11 @@ public class Ball extends GameObject{
     // takes in the ball, it checks if its colliding with the ball
     // if it is it bounces the ball both horizontally and vertically to deflect it
     // not really physically accurate but works for our game for now
+    // it assume the ball is represented by a circle
     @Override
     public boolean collideWithBall(Ball ball) {
-    	Circle b = (Circle) ball.getView();
-    	if (b.getBoundsInParent().intersects(this.getView().getBoundsInParent())) {
+
+    	if (ball.getView().getBoundsInParent().intersects(this.getView().getBoundsInParent())) {
             this.bounceHorizontal();
             this.bounceVertical();
             return true;
@@ -132,29 +138,13 @@ public class Ball extends GameObject{
     	this.angleDegrees += deltaAngle;
     	setDirection(this.angleDegrees);
     }
-
-    public void offsetPositionHorizontal(double deltaX) {
-    	Circle c = (Circle) view;
-        c.setCenterX(c.getCenterX() + deltaX);
-    }
-
-    public void offsetPositionVertival(double deltaY) {
-    	Circle c = (Circle) view;
-        c.setCenterY(c.getCenterY() + deltaY);
-    }
     
     public void resetSpeed() {
         // reset to your initial speed, e.g.:
         updateSpeed(DEFAULT_SPEED);
     }
 
-    @Override
-    public double getX() {
-    return ((Circle) view).getCenterX();
+    public double getRadius() {
+        return radius;
     }
-
-    @Override
-    public double getY() {
-    return ((Circle) view).getCenterY();
-    }   
 }
