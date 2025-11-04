@@ -41,7 +41,7 @@ public class BreakoutController {
     private Color textColor = GameColors.TEXT_COLOR.getColor(); 
     
     
-    
+    private ScreenMaker screenMaker = new ScreenMaker();
     private double width;
     private double height;
     
@@ -54,7 +54,6 @@ public class BreakoutController {
     
     //level fields
     private int currentLevel = 1;
-    private static final int MAX_LEVELS = 3;
     private List<Level> levels = new ArrayList<>();
     
     public void setAnimation(Timeline animation) {
@@ -128,88 +127,9 @@ public class BreakoutController {
         root.getChildren().addAll(scoreLabel, livesLabel);
     }
 
-    // makes the stage that shows the player the game has been won 
-    private void win_game() {
-    	System.out.println(scoreKeeper.readLastNumberFromFile());
-        try {
-            if (animation != null) {
-                animation.stop(); // Stop the game loop
-            }
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("win_game.fxml"));
-            Parent root = loader.load();
-            // set current score
-            Label showScore = (Label) root.lookup("#scoreLabel");
-            if (showScore != null) {
-            	showScore.setText("Final Score: " + score);
-            }
-            
-            
-            Label oldScoreLabel = (Label) root.lookup("#prevHigh");
-            
-
-        
-            scoreKeeper.checkHighScore(score);
-        	oldScoreLabel.setText("High Score is: " + score);
-            
-            
-            
-            Stage stage = (Stage) scoreLabel.getScene().getWindow();
-            Scene scene = new Scene(root, 600, 800);
-            stage.setScene(scene);
-            stage.show();
-            System.out.println(scoreKeeper.readLastNumberFromFile());
-            Button exitButton = (Button) root.lookup("#exitButton");
-            exitButton.setOnAction(e -> stage.close());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-
-    }
+  
 
 
-    // when lives tick to 0 cut the game and tell the player game over in a new window
-    private void endGame() {
-        try {
-            if (animation != null) {
-                animation.stop(); // Stop the game loop
-            }
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("game_over.fxml"));
-            Parent root = loader.load();
-            
-            Label showScore = (Label) root.lookup("#scoreLabel");
-            if (showScore != null) {
-            	showScore.setText("Your Failed Final Score: " + score);
-            }
-            
-            
-            Label oldScoreLabel = (Label) root.lookup("#prevHigh");
-            
-            
-            System.out.println(scoreKeeper.readLastNumberFromFile());
-            System.out.println(score);
-            
-            scoreKeeper.checkHighScore(score);
-        	oldScoreLabel.setText("High Score is: " + scoreKeeper.readLastNumberFromFile());
-      
-            
-            
-            Stage stage = (Stage) scoreLabel.getScene().getWindow();
-            Scene scene = new Scene(root, 600, 800);
-            stage.setScene(scene);
-            stage.show();
-
-            Button exitButton = (Button) root.lookup("#exitButton");
-            exitButton.setOnAction(e -> stage.close());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
     
     
     public void step(double elapsedTime) {
@@ -257,7 +177,7 @@ public class BreakoutController {
             resetBall(ball);
             
             if (lives <= 0) {
-                endGame();
+                screenMaker.endGame(animation,score, scoreKeeper, scoreLabel);
                 return;
                 }
             }
@@ -383,7 +303,7 @@ public class BreakoutController {
     private void nextLevel() {
         currentLevel++;
         if (currentLevel > levels.size()) {
-            win_game();
+            screenMaker.win_game(animation,score, scoreKeeper, scoreLabel);
             return;
         }
         loadLevel(currentLevel, root);
