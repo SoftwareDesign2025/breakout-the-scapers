@@ -12,8 +12,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Main {
-
-
+	
 	/**
 	 * Start the program.
 	 */

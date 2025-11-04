@@ -1,13 +1,19 @@
 package GalagaGameElemtentsEnemies;
 
+import javafx.scene.Group;
+
 public class EnemyRegular extends EnemyBase {
 	
 	String imagePath = "/breakout-the-scapers/src/Pictures/Enemies/NormalEnemy.png";
 	
 	public EnemyRegular(double x, double y, double width, double height, int hp) {
 		super(x, y, width, height, hp);
-		// TODO Auto-generated constructor stub
+		loadImage(); // Load child's specific image
+	}
+	
+	public EnemyRegular(double x, double y, double width, double height, int hp, Group group) {
+		super(x, y, width, height, hp, group);
+		loadImage(); // Load child's specific image
 	}
 
-	
 }
