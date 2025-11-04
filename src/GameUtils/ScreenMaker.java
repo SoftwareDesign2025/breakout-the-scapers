@@ -2,6 +2,8 @@ package GameUtils;
 
 import java.io.IOException;
 
+import javax.sound.sampled.LineUnavailableException;
+
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -99,16 +101,7 @@ public class ScreenMaker {
 
     }
     
-    public void pickGame(Timeline animation) {
-    	
-        try {
-        	FXMLLoader loader = new FXMLLoader(getClass().getResource("StartChooseScreen.fxml"));
-			Parent root = loader.load();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
+   
     
     
     

@@ -1,25 +1,19 @@
 package GameUtils;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Map;
-import org.json.simple.JSONObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 // This class is in charge of maintaining and updating the high scores from the player when the game ends
 public class ScoreKeeper {
     private final static String FILE_NAME = "Scores.txt";
     
 
-    // still testing
-    private int readFromJson(String gameName) {
-    	return 0;
-    }
+
     
     
     // reads the last high score saved inside of the Scores.txt file 
