@@ -1,7 +1,6 @@
 package GameElemtents;
 
 import GameUtils.GameColors;
-import java.net.URL;
 import javafx.scene.Group;
 import javafx.scene.Node;
 //base class for anything put or updated onscreen. Gives a shared view
@@ -17,6 +16,8 @@ public abstract class GameObject {
     protected Color color = GameColors.SECONDARY_COLOR.getColor();
     protected Node view; //javafx node representing this object
     protected Group screenItBelongsTo;
+    // not all game objects have images, but if they do this is the path to the image file
+    protected String imagePath = ""; // path to image file, empty by default
     
     public Node getView() {
         return view;
@@ -75,60 +76,29 @@ public abstract class GameObject {
 
     // Loads an image from imagePath and replaces the view with an ImageView
     // Uses the view's bounds to determine size, avoiding type-specific casting
-    protected void loadImage(String imagePath) {
-    this.color = Color.TRANSPARENT; // Color irrelevant when using image
-
-    if (imagePath == null || imagePath.isEmpty()) {
-        System.out.println("Image path is null or empty.");
-        return;
+    protected void loadImage() {
+        this.color = Color.TRANSPARENT; // Set color to transparent when using an image
+        if (imagePath != null && !imagePath.isEmpty()) {
+            try {
+                Image image = new Image(imagePath);
+                ImageView imageView = new ImageView(image);
+                
+                // Get size from view's bounds (works for any Node type)
+                Bounds bounds = view.getBoundsInLocal();
+                imageView.setFitWidth(bounds.getWidth());
+                imageView.setFitHeight(bounds.getHeight());
+                
+                // Preserve position and translation
+                imageView.setTranslateX(view.getTranslateX());
+                imageView.setTranslateY(view.getTranslateY());
+                imageView.setLayoutX(view.getLayoutX());
+                imageView.setLayoutY(view.getLayoutY());
+                view = imageView;
+            } catch (Exception e) {
+                System.out.println("Failed to load image: " + imagePath);
+                e.printStackTrace();
+            }
+        }
     }
-
-    try {
-        // Try to load from classpath first
-        Image image;
-        URL resource = getClass().getResource(imagePath);
-
-        if (resource != null) {
-            image = new Image(resource.toExternalForm());
-        } else {
-            // If not found in classpath, try as a file path
-            image = new Image("file:" + imagePath);
-        }
-
-        // Verify image loaded successfully
-        if (image.isError()) {
-            System.out.println("Failed to load image: " + imagePath + " (" + image.getException() + ")");
-            return;
-        }
-
-        // Create ImageView
-        ImageView imageView = new ImageView(image);
-        imageView.setPreserveRatio(true);
-
-        // Use view bounds *if valid*, otherwise fallback to image size
-        Bounds bounds = view != null ? view.getBoundsInLocal() : null;
-        double width = (bounds != null && bounds.getWidth() > 0) ? bounds.getWidth() : image.getWidth();
-        double height = (bounds != null && bounds.getHeight() > 0) ? bounds.getHeight() : image.getHeight();
-
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-
-        // Preserve transforms and layout
-        if (view != null) {
-            imageView.setTranslateX(view.getTranslateX());
-            imageView.setTranslateY(view.getTranslateY());
-            imageView.setLayoutX(view.getLayoutX());
-            imageView.setLayoutY(view.getLayoutY());
-        }
-
-        // Finally, replace the view
-        view = imageView;
-
-    } catch (Exception e) {
-        System.out.println("Exception loading image: " + imagePath);
-        e.printStackTrace();
-    }
-}
-
 }
 

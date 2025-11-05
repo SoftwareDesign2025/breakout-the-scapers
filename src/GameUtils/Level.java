@@ -18,6 +18,10 @@ public class Level {
     public final List<BrickUnbreakable> unbreakableBricks = new ArrayList<>(); 
     public final List<PowerUps> powerUps = new ArrayList<>();
     
+    public Level() {
+    	
+    }
+    
     public void populate(Group root, List<Brick> outBricks, List<Brick> outUnbreakableBricks, List<PowerUps> outPowerUps) {
         //add brick nodes and track them
         for (Brick b : bricks) {
@@ -38,7 +42,7 @@ public class Level {
     // a level with an integer difficulty will create random levels using the integer as a dificulty scaler
 
 
-    // util method to create a row of bricks
+    // Util method to create a row of bricks
     private void createRowOfBricks(double yPosition, int numBricks, double brickWidth, double brickHeight, int hp) {
         for (int i = 0; i < numBricks; i++) {
             double xPosition = i * brickWidth;
@@ -55,10 +59,6 @@ public class Level {
             //add visual node to scene
             root.getChildren().add(brick.getView());
         }
-    }
-    
-    public  void updateAll(double elapsedTime) {
-    	
     }
 	
 }
