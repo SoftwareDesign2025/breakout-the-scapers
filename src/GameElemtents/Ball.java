@@ -14,7 +14,7 @@ public class Ball extends GameObject{
 	
     private final double DEFAULT_SPEED = 300;
     private double speed = DEFAULT_SPEED;
-	private Point2D velocity;
+	protected Point2D velocity;
 	private double radius = 10;
     private Paint color = GameColors.ACCENT_COLOR.getColor();
     // this method uses some trigonometry tricks to set the direction of the ball
@@ -148,3 +148,4 @@ public class Ball extends GameObject{
         return radius;
     }
 }
+

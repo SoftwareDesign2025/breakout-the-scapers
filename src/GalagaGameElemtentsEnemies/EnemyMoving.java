@@ -4,7 +4,6 @@ import javafx.scene.Group;
 
 public class EnemyMoving extends EnemyBase {
 	
-	String imagePath = "/breakout-the-scapers/src/Pictures/Enemies/movingEnemy.png";
 	double originalX;
 	double amplitude = 50;
 	double timeSpent = 0;
@@ -12,12 +11,12 @@ public class EnemyMoving extends EnemyBase {
 	public EnemyMoving(double x, double y, double width, double height, int hp) {
 		super(x, y, width, height, hp);
 		originalX = x;
-		loadImage(); // Load child's specific image
+		loadImage("src\\Pictures\\Enemies\\movingEnemy.png");
 	}
 	
 	public EnemyMoving(double x, double y, double width, double height, int hp, Group group) {
-		super(x, y, width, height, hp, group);
-		loadImage(); // Load child's specific image
+		this(x, y, width, height, hp);
+		this.screenItBelongsTo = group;
 	}
 	
 	@Override

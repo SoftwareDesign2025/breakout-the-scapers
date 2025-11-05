@@ -71,7 +71,7 @@ public class GalagaTestController {
 
     private void setupTestLevel() {
         // Create Galaga paddle at the bottom center
-        GalagaPaddle paddle = new GalagaPaddle(width / 2 - 50, height - 80, 100, 30, root);
+        GalagaPaddle paddle = new GalagaPaddle(width / 2 - 50, height - 80, 100, 100, root);
         paddles.add(paddle);
         root.getChildren().add(paddle.getView());
         
@@ -90,7 +90,7 @@ public class GalagaTestController {
         double spacing = 60;
         double startX = 100;
         double startY = 100;
-        int hp = 1;
+        int hp = 2;
         
         // Row 1: Regular enemies
         for (int i = 0; i < 6; i++) {
@@ -113,7 +113,7 @@ public class GalagaTestController {
                 startY + spacing, 
                 enemyWidth, 
                 enemyHeight, 
-                hp + 5, 
+                hp + 8, 
                 root
             );
             enemies.add(enemy);
