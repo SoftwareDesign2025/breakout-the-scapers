@@ -104,7 +104,7 @@ public class GalagaTestController {
                 startY + spacing, 
                 enemyWidth, 
                 enemyHeight, 
-                hp + 1, 
+                hp + 2, 
                 root
             );
             enemies.add(enemy);
@@ -230,17 +230,6 @@ public class GalagaTestController {
 
     public void addScore(int points) {
         score += points;
-    }
-    
-    private void resetBall(GalagaBall ball) {
-        ball.reset(width / 2, height / 2);
-    }
-    
-    private void endGame() {
-        scoreLabel.setText("Game Over! Final Score: " + score);
-        if (animation != null) {
-            animation.stop();
-        }
     }
 }
 

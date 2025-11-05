@@ -58,14 +58,22 @@ public abstract class GameObject {
 
     // these methods offset the position of the object by the given delta values in the horizontal direction
     public void offsetPositionHorizontal(double deltaX) {
-    	view.setTranslateX(view.getTranslateX() + deltaX);
+    	setPositionX(view.getTranslateX() + deltaX);
     }
 
     // these methods offset the position of the object by the given delta values in the vertical direction
     public void offsetPositionVertival(double deltaY) {
-    	view.setTranslateY(view.getTranslateY() + deltaY);
+    	setPositionY(view.getTranslateY() + deltaY);
     }
     
+    public void setPositionX(double x) {
+    	view.setTranslateX(x);
+    }
+
+    public void setPositionY(double y) {
+    	view.setTranslateY(y);
+    }
+
     // Loads an image from imagePath and replaces the view with an ImageView
     // Uses the view's bounds to determine size, avoiding type-specific casting
     protected void loadImage() {

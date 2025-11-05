@@ -12,6 +12,7 @@ public class GalagaBall extends Ball {
 	public GalagaBall(double x, double y) {
 		super(x, y);
 		loadImage();
+		this.updateSpeed(800);
 	}
 	
 	public GalagaBall(double x, double y, Group group) {

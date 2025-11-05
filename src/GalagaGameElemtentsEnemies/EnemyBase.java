@@ -5,7 +5,7 @@ import javafx.scene.Group;
 
 public class EnemyBase extends Brick {
 
-	final int fallSpeed = 10;
+	protected float fallSpeed = .25f;
 	
 	public EnemyBase(double x, double y, double width, double height, int hp) {
 		super(x, y, width, height, hp);
@@ -13,9 +13,17 @@ public class EnemyBase extends Brick {
 	}
 	
 	public EnemyBase(double x, double y, double width, double height, int hp, Group group) {
-		super(x, y, width, height, hp);
+		this(x, y, width, height, hp);
 		this.screenItBelongsTo = group;
-		loadImage();
+	}
+
+	protected void fallDown(){
+		this.offsetPositionVertival(fallSpeed);
+	}
+
+	@Override
+    public void update(double elapsedTime){
+		fallDown();
 	}
 
 }
