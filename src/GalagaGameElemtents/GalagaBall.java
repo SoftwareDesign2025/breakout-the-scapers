@@ -6,7 +6,7 @@ import javafx.scene.Group;
 public class GalagaBall extends Ball {
 
 	int projectileDamage = 1;
-	int ptojectileLife = 1;
+	int ptojecTileLife = 1;
 	boolean shouldRemove = false;
 	
 	public GalagaBall(double x, double y) {
