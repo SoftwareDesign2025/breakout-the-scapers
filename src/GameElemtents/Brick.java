@@ -42,6 +42,16 @@ public class Brick extends GameObject{
         this.isBreakDead = hp <= 0;
         return isBreakDead;
     }
+    
+    // applies damage to the brick and returns true if destroyed
+    public boolean onHit(int damage) {
+        hp -= damage;
+        
+        color = ColorEditor.alterColorHue(15.0f, color);
+        setBrickColor(color);
+        this.isBreakDead = hp <= 0;
+        return isBreakDead;
+    }
 
     // assumes the brick is a rectangle
     // sets the color of the brick
