@@ -7,6 +7,7 @@ public class GalagaBall extends Ball {
 
 	int projectileDamage = 1;
 	int ptojectileLife = 1;
+	boolean shouldRemove = false;
 	
 	public GalagaBall(double x, double y) {
 		super(x, y);
@@ -14,8 +15,19 @@ public class GalagaBall extends Ball {
 	}
 	
 	public GalagaBall(double x, double y, Group group) {
-		super(x, y);
+		this(x, y);
 		this.screenItBelongsTo = group;
-		loadImage();
+	}
+	
+	public int getProjectileDamage() {
+		return projectileDamage;
+	}
+	
+	public void markForRemoval() {
+		shouldRemove = true;
+	}
+	
+	public boolean shouldRemove() {
+		return shouldRemove;
 	}
 }
