@@ -7,14 +7,13 @@ import java.util.List;
 import javafx.animation.Timeline;
 import GalagaGameElemtents.GalagaBall;
 import GalagaGameElemtents.GalagaPaddle;
+import GalagaGameElemtents.GalagaCollissionManager;
 import GalagaGameElemtentsEnemies.EnemyBase;
 import GalagaGameElemtentsEnemies.EnemyRegular;
 import GalagaGameElemtentsEnemies.EnemyTank;
 import GalagaGameElemtentsEnemies.EnemyMoving;
 import GalagaGameElemtentsEnemies.EnemyFast;
-import GameElemtents.Ball;
 import GameElemtents.Brick;
-import GameElemtents.Paddle;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -71,11 +70,6 @@ public class GalagaTestController {
         GalagaPaddle paddle = new GalagaPaddle(width / 2 - 50, height - 80, 100, 30, root);
         paddles.add(paddle);
         root.getChildren().add(paddle.getView());
-        
-        // Create Galaga ball at center of screen
-        GalagaBall ball = new GalagaBall(width / 2, height / 2, root);
-        balls.add(ball);
-        root.getChildren().add(ball.getView());
         
         // Create a test formation of different enemy types
         createEnemyFormation();
@@ -168,15 +162,27 @@ public class GalagaTestController {
         }
     }
     
+    public void spawnBall() {
+        if (!paddles.isEmpty()) {
+            GalagaPaddle paddle = paddles.get(0);
+            // Spawn ball at the center top of the paddle, slightly above to avoid immediate collision
+            double ballX = paddle.getX() + paddle.getView().getBoundsInLocal().getWidth() / 2;
+            double ballY = paddle.getY() - 20; // Spawn slightly above the paddle
+            GalagaBall ball = new GalagaBall(ballX, ballY, root);
+            // Set direction upward (270 degrees = straight up)
+            ball.setDirection(270);
+            balls.add(ball);
+            root.getChildren().add(ball.getView());
+        }
+    }
+    
     public void step(double elapsedTime) {
         // Collisions with ball paddle/enemies
-        // Convert to base types for collision manager
-        List<Paddle> paddleList = new ArrayList<>(paddles);
-        List<Ball> ballList = new ArrayList<>(balls);
+        // Use Galaga-specific collision manager with Galaga types
         List<Brick> enemyList = new ArrayList<>(enemies);
         
-        CollisionManager.handleBallPaddle(ballList, paddleList);
-        addScore(CollisionManager.handleBallBricks(ballList, enemyList));
+        GalagaCollissionManager.handleBallPaddle(balls, paddles);
+        addScore(GalagaCollissionManager.handleBallBricks(balls, enemyList));
         
         // Update enemies (they may move or fall)
         for (EnemyBase enemy : enemies) {
@@ -207,18 +213,14 @@ public class GalagaTestController {
             System.out.println("All enemies defeated! Score: " + score);
         }
 
-        // If ball falls below the screen, lose a life and reset ball
+        // Remove balls that hit top of screen or fell below screen (balls that hit bricks are already removed by collision manager)
         Iterator<GalagaBall> ballIterator = balls.iterator();
         while (ballIterator.hasNext()) {
             GalagaBall ball = ballIterator.next();
-            if (ball.getY() > height) {
-                lives--;
-                resetBall(ball);
-                
-                if (lives <= 0) {
-                    endGame();
-                    return;
-                }
+            // If ball reaches the top of the screen, remove it
+            if (ball.getY() <= ball.getRadius()) {
+                ball.eraseFromScreen();
+                ballIterator.remove();
             }
         }
         
