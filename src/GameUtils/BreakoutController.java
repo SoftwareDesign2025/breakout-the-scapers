@@ -97,7 +97,7 @@ public class BreakoutController extends GameController{
     protected void nextLevel() {
         currentLevel++;
         if (currentLevel > levels.size()) {
-            screenMaker.win_game(animation, score, scoreLabel, "Breakout");
+            screenMaker.winGame(animation, score, scoreLabel, "Breakout");
             return;
         }
         loadLevel(currentLevel, root);
@@ -124,6 +124,7 @@ public class BreakoutController extends GameController{
     }
     
     // personal easter egg (and for testing win game)
+	@Override
     public void easterEggCheck(Boolean isPressed, String gameName) {
     	if (isPressed) {
     		screenMaker.winGame(animation, 999999, scoreLabel, gameName);
