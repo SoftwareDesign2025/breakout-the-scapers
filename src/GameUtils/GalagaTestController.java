@@ -84,7 +84,7 @@ public class GalagaTestController {
         int hp = 1;
         
         // Row 1: Regular enemies
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             EnemyRegular enemy = new EnemyRegular(
                 startX + i * spacing, 
                 startY, 
@@ -98,13 +98,13 @@ public class GalagaTestController {
         }
         
         // Row 2: Tank enemies (more HP)
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 7; i++) {
             EnemyTank enemy = new EnemyTank(
                 startX + i * spacing + spacing / 2, 
                 startY + spacing, 
                 enemyWidth, 
                 enemyHeight, 
-                hp + 1, 
+                hp + 5, 
                 root
             );
             enemies.add(enemy);
@@ -112,10 +112,10 @@ public class GalagaTestController {
         }
         
         // Row 3: Moving enemies
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             EnemyMoving enemy = new EnemyMoving(
                 startX + i * spacing, 
-                startY + spacing * 2, 
+                startY - spacing, 
                 enemyWidth, 
                 enemyHeight, 
                 hp, 
@@ -126,10 +126,10 @@ public class GalagaTestController {
         }
         
         // Row 4: Fast enemies
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 7; i++) {
             EnemyFast enemy = new EnemyFast(
                 startX + i * spacing + spacing / 2, 
-                startY + spacing * 3, 
+                startY - spacing * 2, 
                 enemyWidth, 
                 enemyHeight, 
                 hp, 
@@ -230,17 +230,6 @@ public class GalagaTestController {
 
     public void addScore(int points) {
         score += points;
-    }
-    
-    private void resetBall(GalagaBall ball) {
-        ball.reset(width / 2, height / 2);
-    }
-    
-    private void endGame() {
-        scoreLabel.setText("Game Over! Final Score: " + score);
-        if (animation != null) {
-            animation.stop();
-        }
     }
 }
 
