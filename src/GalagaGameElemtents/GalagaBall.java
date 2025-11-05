@@ -1,22 +1,22 @@
 package GalagaGameElemtents;
 // Author: Jose Andres Besednjak Izquierdo
 import GameElemtents.Ball;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 
 public class GalagaBall extends Ball {
 
 	int projectileDamage = 1;
-	int ptojecTileLife = 1;
-	boolean shouldRemove = false;
+	int ptojectileLife = 1;
 	
 	public GalagaBall(double x, double y) {
 		super(x, y);
 		loadImage();
-		this.updateSpeed(800);
+		velocity = new Point2D(0, -400);
 	}
 	
 	public GalagaBall(double x, double y, Group group) {
-		this(x, y);
+		super(x, y);
 		this.screenItBelongsTo = group;
 		screenItBelongsTo.getChildren().add(this.getView());
 	}
@@ -25,3 +25,5 @@ public class GalagaBall extends Ball {
 		return projectileDamage;
 	}
 }
+
+		//loadImage("src\\Pictures\\BallPixelArt.png");

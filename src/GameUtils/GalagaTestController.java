@@ -70,7 +70,7 @@ public class GalagaTestController {
 
     private void setupTestLevel() {
         // Create Galaga paddle at the bottom center
-        GalagaPaddle paddle = new GalagaPaddle(width / 2 - 50, height - 80, 100, 30, root);
+        GalagaPaddle paddle = new GalagaPaddle(width / 2 - 50, height - 80, 100, 100, root);
         paddles.add(paddle);
         root.getChildren().add(paddle.getView());
         
