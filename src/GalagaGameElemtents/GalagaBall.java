@@ -1,5 +1,5 @@
 package GalagaGameElemtents;
-
+// Author: Jose Andres Besednjak Izquierdo
 import GameElemtents.Ball;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -18,16 +18,12 @@ public class GalagaBall extends Ball {
 	public GalagaBall(double x, double y, Group group) {
 		super(x, y);
 		this.screenItBelongsTo = group;
-		loadImage();
-		velocity = new Point2D(0, -400);
+		screenItBelongsTo.getChildren().add(this.getView());
 	}
 	
-	@Override
-    public void update(double elapsedTime) {
-        // move only; no bouncing
-        offsetPositionHorizontal(velocity.getX() * elapsedTime);
-        offsetPositionVertival(velocity.getY() * elapsedTime);
-    }
+	public int getProjectileDamage() {
+		return projectileDamage;
+	}
 }
 
 		//loadImage("src\\Pictures\\BallPixelArt.png");

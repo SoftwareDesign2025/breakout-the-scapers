@@ -1,5 +1,5 @@
 package GameElemtents;
-
+// Author: Jose Andres Besednjak Izquierdo
 
 import GameUtils.GameColors;
 import javafx.geometry.Point2D;

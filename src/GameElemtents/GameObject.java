@@ -1,5 +1,5 @@
 package GameElemtents;
-
+// Author: Jose Andres Besednjak Izquierdo
 import GameUtils.GameColors;
 import java.net.URL;
 import javafx.scene.Group;
