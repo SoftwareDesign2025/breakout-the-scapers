@@ -1,6 +1,6 @@
 package GameElemtents;
 
-// Author: Jose Andres Besednjak Izquierdo
+
 import GameUtils.GameColors;
 import javafx.geometry.Bounds;
 import javafx.scene.paint.Paint;

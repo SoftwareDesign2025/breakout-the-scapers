@@ -1,6 +1,6 @@
 package GalagaGameElemtentsEnemies;
 
-// Author: Jose Andres Besednjak Izquierdo
+
 import javafx.scene.Group;
 
 public class EnemyFast extends EnemyBase {

@@ -1,5 +1,5 @@
 package GameUtils;
-// Author: Jose Andres Besednjak Izquierdo
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +13,7 @@ import GalagaGameElemtentsEnemies.EnemyRegular;
 import GalagaGameElemtentsEnemies.EnemyTank;
 import GalagaGameElemtentsEnemies.EnemyMoving;
 import GalagaGameElemtentsEnemies.EnemyFast;
+import GameElemtents.Brick;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -89,7 +90,7 @@ public class GalagaTestController {
         double spacing = 60;
         double startX = 100;
         double startY = 100;
-        int hp = 3;
+        int hp = 2;
         
         // Row 1: Regular enemies
         for (int i = 0; i < 6; i++) {
@@ -112,7 +113,7 @@ public class GalagaTestController {
                 startY + spacing, 
                 enemyWidth, 
                 enemyHeight, 
-                hp, 
+                hp + 8, 
                 root
             );
             enemies.add(enemy);
@@ -180,12 +181,17 @@ public class GalagaTestController {
             // Set direction upward (270 degrees = straight up)
             ball.setDirection(270);
             balls.add(ball);
+            root.getChildren().add(ball.getView());
         }
     }
     
     public void step(double elapsedTime) {
-
-        addScore(GalagaCollissionManager.handleBallBricks(balls, enemies));
+        // Collisions with ball paddle/enemies
+        // Use Galaga-specific collision manager with Galaga types
+        List<Brick> enemyList = new ArrayList<>(enemies);
+        
+        GalagaCollissionManager.handleBallPaddle(balls, paddles);
+        addScore(GalagaCollissionManager.handleBallBricks(balls, enemyList));
         
         // Update enemies (they may move or fall)
         for (EnemyBase enemy : enemies) {
@@ -199,6 +205,16 @@ public class GalagaTestController {
         for (GalagaPaddle paddle : paddles) {
             paddle.update(elapsedTime);
         }
+        
+        // Remove dead enemies from the scene
+        Iterator<EnemyBase> enemyIterator = enemies.iterator();
+        while (enemyIterator.hasNext()) {
+            EnemyBase enemy = enemyIterator.next();
+            if (enemy.deadBrick()) {
+                root.getChildren().remove(enemy.getView());
+                enemyIterator.remove();
+            }
+        }
 
         // Check if all enemies are cleared
         if (enemies.isEmpty()) {
@@ -207,7 +223,6 @@ public class GalagaTestController {
         }
 
         // Remove balls that hit top of screen or fell below screen (balls that hit bricks are already removed by collision manager)
-        // this has to be done here because I had no made it so that you can delete the ball list from ball
         Iterator<GalagaBall> ballIterator = balls.iterator();
         while (ballIterator.hasNext()) {
             GalagaBall ball = ballIterator.next();

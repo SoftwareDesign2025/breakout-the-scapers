@@ -1,7 +1,5 @@
 package GameElemtents;
 
-
-// Author: Jose Andres Besednjak Izquierdo
 import GameUtils.ColorEditor;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -68,7 +66,7 @@ public class Brick extends GameObject{
 
     public int getPoints() {
         int temp = points;
-        points = (points * 3 / 4) + 1; 
+        points -= 10; 
         System.out.println(points);
         return temp;
     }
