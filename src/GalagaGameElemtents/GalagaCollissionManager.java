@@ -1,9 +1,8 @@
 package GalagaGameElemtents;
-
+// Author: Jose Andres Besednjak Izquierdo
+import GalagaGameElemtentsEnemies.EnemyBase;
 import java.util.Iterator;
 import java.util.List;
-
-import GameElemtents.Brick;
 
 public class GalagaCollissionManager {
 	
@@ -13,24 +12,39 @@ public class GalagaCollissionManager {
 
     // returns the total points scored
     // For Galaga balls: applies damage and removes ball immediately on hit
-    public static int handleBallBricks(List<GalagaBall> balls, List<Brick> bricks) {
+    public static int handleBallBricks(List<GalagaBall> balls, List<EnemyBase> enemies) {
         int score = 0;
+
         Iterator<GalagaBall> ballIterator = balls.iterator();
+
+
         while (ballIterator.hasNext()) {
             GalagaBall galagaBall = ballIterator.next();
-            for (Brick brick : bricks) {
+
+            // for every ball we reset the iterator at the beggining
+            Iterator<EnemyBase> enemyIterator = enemies.iterator();
+            while (enemyIterator.hasNext()) {
                 // Check collision
-                if (brick.getView().getBoundsInParent().intersects(galagaBall.getView().getBoundsInParent())) {
+                EnemyBase enemy = enemyIterator.next();
+
+                if (enemy.getView().getBoundsInParent().intersects(galagaBall.getView().getBoundsInParent())) {
                     // Apply damage from the ball
                     int damage = galagaBall.getProjectileDamage();
-                    boolean destroyed = brick.onHit(damage);
-                    if (destroyed) {
-                        score += brick.getPoints();
+
+                    // for every hit add to the score
+                    score += enemy.getPoints();
+                    
+                    // remove enemy if dead
+                    if (enemy.onHit(damage)){
+                        enemy.eraseFromScreen();
+                        enemyIterator.remove();
                     }
+
                     // Remove ball immediately from list and scene (ball removes itself)
                     galagaBall.eraseFromScreen();
                     ballIterator.remove();
-                    break; // Only one brick hit per ball
+                    // only one hit per ball
+                    break;
                 }
             }
         }

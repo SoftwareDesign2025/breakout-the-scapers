@@ -1,14 +1,12 @@
 package GalagaGameElemtentsEnemies;
-
+// Author: Jose Andres Besednjak Izquierdo
 import javafx.scene.Group;
 
 public class EnemyTank extends EnemyBase {
-	
-	String imagePath = "/breakout-the-scapers/src/Pictures/Enemies/ChunkyEnemy.png";
-	
+	// wahetever HP it has triple it.
 	public EnemyTank(double x, double y, double width, double height, int hp) {
-		super(x, y, width, height, hp);
-		loadImage(); // Load child's specific image
+		super(x, y, width, height, hp*3);
+		loadImage("src\\Pictures\\Enemies\\diamond.png"); 
 	}
 	
 	public EnemyTank(double x, double y, double width, double height, int hp, Group group) {
