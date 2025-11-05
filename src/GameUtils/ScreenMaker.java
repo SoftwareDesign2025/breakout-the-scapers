@@ -47,7 +47,7 @@ public class ScreenMaker {
             scoreKeeper.checkHighScore(score, gameName);
         	oldScoreLabel.setText(DISPLAYHIGHSCORE + score);
             
-            
+       
             
             Stage stage = (Stage) scoreLabel.getScene().getWindow();
             Scene scene = new Scene(root, SCREENWIDTH, SCREENHEIGHT);
