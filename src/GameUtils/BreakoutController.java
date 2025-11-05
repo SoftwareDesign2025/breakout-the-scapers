@@ -24,8 +24,8 @@ import javafx.scene.paint.Paint;
 public class BreakoutController {
     
     public static final int PADDLE_SPEED = 10;
-    private ScoreKeeper scoreKeeper = new ScoreKeeper();
     
+    private String gameName = "breakout";
     
     public final int LIVES_START = 3;
 
@@ -178,7 +178,7 @@ public class BreakoutController {
             resetBall(ball);
             
             if (lives <= 0) {
-                screenMaker.endGame(animation,score, scoreKeeper, scoreLabel);
+                screenMaker.endGame(animation,score, scoreLabel, gameName);
                 return;
                 }
             }
@@ -304,7 +304,7 @@ public class BreakoutController {
     private void nextLevel() {
         currentLevel++;
         if (currentLevel > levels.size()) {
-            screenMaker.win_game(animation,score, scoreKeeper, scoreLabel);
+            screenMaker.win_game(animation,score, scoreLabel, gameName);
             return;
         }
         loadLevel(currentLevel, root);
