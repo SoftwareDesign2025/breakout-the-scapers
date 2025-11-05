@@ -1,7 +1,7 @@
 package GameElemtents;
 
 
-import GameUtils.BreakoutController;
+import GameUtils.GameController;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -77,7 +77,7 @@ public class PowerUps extends GameObject {
 	        super(x, y, 10, Color.GOLD);
 	    }
 
-	    public void applyEffect(BreakoutController controller) {
+	    public void applyEffect(GameController controller) {
 	        controller.addLife();
 	    }
 	}
