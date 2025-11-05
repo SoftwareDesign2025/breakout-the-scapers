@@ -10,7 +10,7 @@ public class EnemyTank extends EnemyBase {
 	}
 	
 	public EnemyTank(double x, double y, double width, double height, int hp, Group group) {
-		this(x, y, width, height, hp);
-		this.screenItBelongsTo = group;
+		super(x, y, width, height, hp, group);
+		loadImage(); // Load child's specific image
 	}
 }

@@ -9,6 +9,7 @@ public class EnemyBase extends Brick {
 	
 	public EnemyBase(double x, double y, double width, double height, int hp) {
 		super(x, y, width, height, hp);
+		loadImage();
 	}
 	
 	public EnemyBase(double x, double y, double width, double height, int hp, Group group) {

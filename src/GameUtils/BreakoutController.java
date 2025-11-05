@@ -5,33 +5,126 @@ import java.util.Iterator;
 import java.util.List;
 
 
+import javafx.animation.Timeline;
 import GameElemtents.Ball;
 import GameElemtents.Brick;
 import GameElemtents.Paddle;
-
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import GameElemtents.PowerUps;
 
-
-public class BreakoutController extends GameController{
-
-	public static final int PADDLE_SPEED = 10;
-    private ScoreKeeper scoreKeeper = new ScoreKeeper();
+public class BreakoutController {
+    public static final int PADDLE_SPEED = 10;
+    
+    private String gameName = "breakout";
     
     public final int LIVES_START = 3;
+
+    private List<Paddle> paddles;
+    private List<Ball> balls; 
+    private List<Brick> bricks;
+    private List<Brick> unbreakableBricks;
+
+    private int score;
+    private int lives;
+    private Text scoreLabel;
+    private Text livesLabel;
+    private Color textColor = GameColors.TEXT_COLOR.getColor(); 
     
-    @Override
-    protected void loadAllLevels() {
-        levels.clear();
-        levels.add(LevelBuilder.createLevel1(GameColors.SECONDARY_COLOR.getColor()));
-        levels.add(LevelBuilder.createLevel2());
-        levels.add(LevelBuilder.createLevel3(GameColors.SECONDARY_COLOR.getColor()));
+    
+    private ScreenMaker screenMaker = new ScreenMaker();
+    private double width;
+    private double height;
+    
+    private Timeline animation;
+
+    
+    
+    private List<PowerUps> powerUps = new ArrayList<>();
+    private Group root;
+    
+    //level fields
+    private int currentLevel = 1;
+    private List<Level> levels = new ArrayList<>();
+    
+    public void setAnimation(Timeline animation) {
+        this.animation = animation;
+    }
+
+
+    //create game objects and sets up the initial scene layout
+    public Group createRoot(int windowWidth, int windowHeight) {
+        width = windowWidth;
+        height = windowHeight;
+
+        root = new Group();
+        
+        
+        //create bricks
+        bricks = new ArrayList<>();
+        unbreakableBricks = new ArrayList<>();
+
+        score = 0;
+        lives = LIVES_START;
+        //track current level
+        int currentLevel = 1;
+
+        loadAllLevels();
+        loadLevel(currentLevel, root);
+        setTextAndLabels();
+        
+        return root;
+    }
+
+    private void resetBallsPaddles(){
+    	//remove old paddle nodes
+        if (paddles != null) {
+            for (Paddle p : paddles) {
+                root.getChildren().remove(p.getView());
+            }
+        }
+        //removes ball for new one to be placed
+        if (balls != null) {
+            for (Ball b : balls) {
+                root.getChildren().remove(b.getView());
+            }
+        }
+        
+        Paddle paddle = new Paddle(width / 2 - 50, height - 50, 100, 15); //change 200 back to 100
+        paddles = new ArrayList<>();
+        paddles.add(paddle);
+        //create ball at the center of screen
+        // its default direction is upward at 90 degrees
+        Ball ball = new Ball(width / 2, height / 2);
+        balls = new ArrayList<>();
+        balls.add(ball);
+        //add visual components to root group
+        for (Paddle p : paddles) {
+            root.getChildren().add(p.getView());
+        }
+        for (Ball b : balls) {
+            root.getChildren().add(b.getView());
+        }
+        
     }
     
-	
-	@Override
-	public void step(double elapsedTime) {
+    private void setTextAndLabels(){
+        // Score and lives text setup
+        scoreLabel = new Text(20, 20, "Score: 0");
+        scoreLabel.setFill(textColor);
+        livesLabel = new Text(500, 20, "Lives: " + lives);
+        livesLabel.setFill(textColor);
+
+        root.getChildren().addAll(scoreLabel, livesLabel);
+    }
+
+  
+
+
+    
+    
+    public void step(double elapsedTime) {
 
         //collisions with ball paddle/bricks
         CollisionManager.handleBallPaddle(balls, paddles);
@@ -76,7 +169,7 @@ public class BreakoutController extends GameController{
             resetBall(ball);
             
             if (lives <= 0) {
-                screenMaker.endGame(animation, score, scoreLabel, "Breakout");
+                screenMaker.endGame(animation,score, scoreLabel, gameName);
                 return;
                 }
             }
@@ -102,10 +195,9 @@ public class BreakoutController extends GameController{
         }
         loadLevel(currentLevel, root);
     }
-	
-	@Override
-	//apply the effect of a collected power-up
-    protected void applyPowerUp(PowerUps pu) {
+    
+  //apply the effect of a collected power-up
+    private void applyPowerUp(PowerUps pu) {
         for (Paddle paddle : paddles) {
             if (pu instanceof PowerUps.ExpandPaddlePowerUp) {
             paddle.expand(); // expands paddle width
@@ -130,10 +222,106 @@ public class BreakoutController extends GameController{
     		screenMaker.winGame(animation, 999999, scoreLabel, gameName);
     	}
     }
-	
-	//reset ball to the center of the screen
-    public void resetBall(Ball ball) {
-        ball.reset(width / 2, height / 2);
+
+    
+    public void setMoveLeft(boolean isMoving) {
+        for (Paddle paddle : paddles){
+            paddle.setMoveLeft(isMoving);
+        }
     }
 
+    public void setMoveRight(boolean isMoving) {
+        for (Paddle paddle : paddles){
+         paddle.setMoveRight(isMoving);
+        }
+    }
+    
+    
+    //level generator
+    //to be called once during initialization in createRoot
+    private void loadAllLevels() {
+        levels.clear();
+        levels.add(LevelBuilder.createLevel1(GameColors.SECONDARY_COLOR.getColor()));
+        levels.add(LevelBuilder.createLevel2());
+        levels.add(LevelBuilder.createLevel3(GameColors.SECONDARY_COLOR.getColor()));
+    }
+
+    // new loadLevel which uses Level objects
+    private void loadLevel(int levelNumber, Group root) {
+        // defensive bounds
+        if (levelNumber < 1) levelNumber = 1;
+        if (levels.isEmpty()) loadAllLevels();
+        if (levelNumber > levels.size()) levelNumber = levels.size();
+
+        // remove old powerups & bricks (keep paddles/balls/UI)
+        if (powerUps != null) {
+            for (PowerUps pu : powerUps) {
+                if (pu != null && pu.getView() != null) {
+                    root.getChildren().remove(pu.getView());
+                }
+            }
+        }
+        powerUps.clear();
+
+        if (bricks != null) {
+            for (Brick b : bricks) {
+                if (b != null && b.getView() != null) root.getChildren().remove(b.getView());
+            }
+        }
+        bricks.clear();
+
+        if (unbreakableBricks != null) {
+            for (Brick b : unbreakableBricks) {
+                if (b != null && b.getView() != null) root.getChildren().remove(b.getView());
+            }
+        }
+        unbreakableBricks.clear();
+
+        // remove leftover shapes but keep paddles/balls/labels
+        root.getChildren().removeIf(node -> {
+            if (node == scoreLabel || node == livesLabel) return false;
+            if (paddles != null && paddles.stream().anyMatch(p -> p.getView() == node)) return false;
+            if (balls != null && balls.stream().anyMatch(b -> b.getView() == node)) return false;
+            // else remove old shapes
+            return node instanceof javafx.scene.shape.Shape;
+        });
+
+        // populate from Level object
+        Level level = levels.get(levelNumber - 1);
+        level.populate(root, bricks, unbreakableBricks, powerUps);
+        
+
+        // reset paddles and balls for the level
+        resetBallsPaddles();
+        for (Paddle p : paddles) {
+            p.resetSize();
+        }
+    }
+    
+
+
+    //called when all bricks are cleared to progress to next level.
+    private void nextLevel() {
+        currentLevel++;
+        if (currentLevel > levels.size()) {
+            screenMaker.winGame(animation,score, scoreLabel, gameName);
+            return;
+        }
+        loadLevel(currentLevel, root);
+    }
+   
+   //to check if all removable bricks are removed
+   private boolean allBreakableBricksCleared() {
+	    for (Brick b : bricks) {
+	        if (b.getHP() > 0 && b.getHP() != Integer.MAX_VALUE) {
+	            return false; //still breakable bricks remaining
+	        }
+	    }
+	    return true;
+	}
+   
+   //for life powerup
+   public void addLife() {
+	    lives++;
+	}
 }

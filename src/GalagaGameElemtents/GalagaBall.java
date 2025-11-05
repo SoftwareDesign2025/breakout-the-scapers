@@ -1,13 +1,13 @@
 package GalagaGameElemtents;
 
 import GameElemtents.Ball;
-import javafx.geometry.Point2D;
 import javafx.scene.Group;
 
 public class GalagaBall extends Ball {
 
 	int projectileDamage = 1;
-	int ptojectileLife = 1;
+	int ptojecTileLife = 1;
+	boolean shouldRemove = false;
 	
 	public GalagaBall(double x, double y) {
 		super(x, y);
@@ -16,7 +16,7 @@ public class GalagaBall extends Ball {
 	}
 	
 	public GalagaBall(double x, double y, Group group) {
-		super(x, y);
+		this(x, y);
 		this.screenItBelongsTo = group;
 		loadImage("src\\Pictures\\BallPixelArt.png");
 		velocity = new Point2D(0, -400);
@@ -29,5 +29,3 @@ public class GalagaBall extends Ball {
         offsetPositionVertival(velocity.getY() * elapsedTime);
     }
 }
-
-		//loadImage("src\\Pictures\\BallPixelArt.png");

@@ -10,7 +10,7 @@ import GameUtils.CollisionManager;
 
 public class GalagaCollissionManager extends CollisionManager {
 	
-	public static void handleBallPaddle(List<Ball> balls, List<Paddle> paddles) {
+	public static void handleBallPaddle(List<GalagaBall> balls, List<GalagaPaddle> paddles) {
         
     }
 
@@ -21,12 +21,11 @@ public class GalagaCollissionManager extends CollisionManager {
         while (it.hasNext()) {
             for (Ball ball : balls) {
             }
-            
         }
         return score;
     }
     
-    public static void handleBallBall(List<Ball> balls) {
+    public static void handleBallBall(List<GalagaBall> balls) {
        
     }
 }
