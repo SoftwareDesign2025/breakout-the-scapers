@@ -1,5 +1,5 @@
 package GameUtils;
-// Author: Jose Andres Besednjak Izquierdo
+
 import javafx.scene.Node;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.paint.Color;

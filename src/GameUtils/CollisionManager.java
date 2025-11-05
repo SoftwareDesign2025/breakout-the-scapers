@@ -1,5 +1,5 @@
 package GameUtils;
-// Author: Jose Andres Besednjak Izquierdo
+
 import java.util.Iterator;
 import java.util.List;
 
