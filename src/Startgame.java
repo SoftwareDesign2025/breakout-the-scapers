@@ -1,5 +1,3 @@
-import GameUtils.GameController;
-import GalagaGameUtils.GalagaController;
 import GameUtils.BreakoutController;
 import GameUtils.GameColors;
 import GameUtils.ScreenMaker;
@@ -14,7 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.geometry.Pos;
+
+
 
 
 
@@ -86,45 +85,6 @@ public class Startgame extends Application{
 	        animation.play();
 	        
 	        myController.setAnimation(animation);
-	    }
-	    
-	    private void startGalaga(Stage stage) {
-	        myController = new GalagaController();
-	        myScene = setupScene(screenMaker.SCREENWIDTH, screenMaker.SCREENHEIGHT, GameColors.BACKGROUND.getColor());
-	        stage.setScene(myScene);
-	        stage.setTitle("Galaga");
-	        stage.show();
-
-	        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-	                e -> myController.step(SECOND_DELAY));
-
-	        Timeline animation = new Timeline();
-	        animation.setCycleCount(Timeline.INDEFINITE);
-	        animation.getKeyFrames().add(frame);
-	        animation.play();
-
-	        myController.setAnimation(animation);
-
-	        //key press for shooting bullets
-	        myScene.setOnKeyPressed(e -> {
-	            KeyCode code = e.getCode();
-	            if (code == KeyCode.SPACE) {
-	                ((GalagaController) myController).fireProjectile();
-	            } else if (code == KeyCode.LEFT) {
-	                myController.setMoveLeft(true);
-	            } else if (code == KeyCode.RIGHT) {
-	                myController.setMoveRight(true);
-	            }
-	        });
-
-	        myScene.setOnKeyReleased(e -> {
-	            KeyCode code = e.getCode();
-	            if (code == KeyCode.LEFT) {
-	                myController.setMoveLeft(false);
-	            } else if (code == KeyCode.RIGHT) {
-	                myController.setMoveRight(false);
-	            }
-	        });
 	    }
 
 	    
