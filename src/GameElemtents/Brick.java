@@ -54,7 +54,8 @@ public class Brick extends GameObject{
 
     public int getPoints() {
         int temp = points;
-        points/=2; // half the points each time to prevent farming
+        points -= 10; 
+        System.out.println(points);
         return temp;
     }
     
