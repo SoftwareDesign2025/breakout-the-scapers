@@ -1,8 +1,5 @@
 package GameUtils;
 
-
-import java.io.*;
-import java.sql.Time;
 // this is for making a global timer methods to be used and called for other game functions
 public class GameTimer {
     private static final int CONVERT_TIME_SEC = 1000; // milliseconds in a second
@@ -14,15 +11,17 @@ public class GameTimer {
 	}
 	
 
-    // Returns true if the given time limit (in seconds) has passed since start
+    // Returns true if the given time limit (in seconds) has passed since start of the game
     public boolean timerExpired(int timeLimitSeconds) {
         long elapsedTime = System.currentTimeMillis() - startTime;
-        return elapsedTime >= timeLimitSeconds * CONVERT_TIME_SEC;
+        boolean timeSinceStart = elapsedTime >= timeLimitSeconds * CONVERT_TIME_SEC;
+        return timeSinceStart;
+        
     }
 	
-	// get current time
-    public double getElapsedTimeSeconds() {
-        return (System.currentTimeMillis() - startTime) / (double) CONVERT_TIME_SEC;
+	// get the time the game has been running for
+    public long getElapsedTimeSeconds() {
+        return (System.currentTimeMillis() - startTime) /  CONVERT_TIME_SEC;
     }
     // waits for a given amount of time for something to happen
     public void wait(int wait_time) {

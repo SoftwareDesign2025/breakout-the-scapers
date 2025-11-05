@@ -1,9 +1,4 @@
 package GameUtils;
-
-import java.io.IOException;
-
-import javax.sound.sampled.LineUnavailableException;
-
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,32 +11,41 @@ import javafx.stage.Stage;
 public class ScreenMaker {
 	
 	
-	public static final int SCREENWIDTH = 600;
-	public static final int SCREENHEIGHT = 800;
+	public final int SCREENWIDTH = 600;
+	public final int SCREENHEIGHT = 800;
+	private final ScoreKeeper scoreKeeper = new ScoreKeeper();
+	
+	private final String WINGAMEFILE = "win_game.fxml";
+	private final String LOSEGAMEFILE = "game_over.fxml";
+	private final String DISPLAYSCORE = "#scoreLabel";
+	private final String DISPLAYFINALSCORE = "Final Score: ";
+	private final String DISPLAYHIGHSCORE = "High Score is: ";
+	private final String DISPLAYPREVHIGHSCORE = "#prevHigh";
+	private final String DISPLAYEXITBUTTON = "#exitButton";
 	
 	
-    // makes the stage that shows the player the game has been won 
-    public void win_game(Timeline animation, int score, ScoreKeeper scoreKeeper, Text scoreLabel) {
-        try {
+	
+	private void screenSetter(int score, Text scoreLabel, String gameName, Timeline animation) {
+		try {
             if (animation != null) {
                 animation.stop(); // Stop the game loop
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("win_game.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(WINGAMEFILE));
             Parent root = loader.load();
             // set current score
-            Label showScore = (Label) root.lookup("#scoreLabel");
+            Label showScore = (Label) root.lookup(DISPLAYSCORE);
             if (showScore != null) {
-            	showScore.setText("Final Score: " + score);
+            	showScore.setText(DISPLAYFINALSCORE + score);
             }
             
             
-            Label oldScoreLabel = (Label) root.lookup("#prevHigh");
+            Label oldScoreLabel = (Label) root.lookup(DISPLAYPREVHIGHSCORE);
             
 
         
-            scoreKeeper.checkHighScore(score);
-        	oldScoreLabel.setText("High Score is: " + score);
+            scoreKeeper.checkHighScore(score, gameName);
+        	oldScoreLabel.setText(DISPLAYHIGHSCORE + score);
             
             
             
@@ -49,8 +53,51 @@ public class ScreenMaker {
             Scene scene = new Scene(root, SCREENWIDTH, SCREENHEIGHT);
             stage.setScene(scene);
             stage.show();
-            System.out.println(scoreKeeper.readLastNumberFromFile());
-            Button exitButton = (Button) root.lookup("#exitButton");
+	       } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        
+            
+       
+        
+	}
+	
+    // makes the stage that shows the player the game has been won 
+    public void win_game(Timeline animation, int score, Text scoreLabel, String gameName) {
+    	
+        try {
+            if (animation != null) {
+                animation.stop(); // Stop the game loop
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(WINGAMEFILE));
+            Parent root = loader.load();
+            // set current score
+            Label showScore = (Label) root.lookup(DISPLAYSCORE);
+            if (showScore != null) {
+            	showScore.setText(DISPLAYFINALSCORE + score);
+            }
+            
+            
+            Label oldScoreLabel = (Label) root.lookup(DISPLAYPREVHIGHSCORE);
+            
+
+        
+            scoreKeeper.checkHighScore(score, gameName);
+        	oldScoreLabel.setText(DISPLAYHIGHSCORE + score);
+            
+            
+            
+            Stage stage = (Stage) scoreLabel.getScene().getWindow();
+            Scene scene = new Scene(root, SCREENWIDTH, SCREENHEIGHT);
+            stage.setScene(scene);
+            stage.show();
+            
+            
+            
+//            System.out.println(scoreKeeper.readLastNumberFromFile(gameName));
+            
+            Button exitButton = (Button) root.lookup(DISPLAYEXITBUTTON);
             exitButton.setOnAction(e -> stage.close());
 
         } catch (Exception e) {
@@ -61,29 +108,29 @@ public class ScreenMaker {
     }
     
     // when lives tick to 0 cut the game and tell the player game over in a new window
-    public void endGame(Timeline animation, int score, ScoreKeeper scoreKeeper, Text scoreLabel) {
+    public void endGame(Timeline animation, int score, Text scoreLabel, String gameName) {
         try {
             if (animation != null) {
                 animation.stop(); // Stop the game loop
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("game_over.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(LOSEGAMEFILE));
             Parent root = loader.load();
             
-            Label showScore = (Label) root.lookup("#scoreLabel");
+            Label showScore = (Label) root.lookup(DISPLAYSCORE);
             if (showScore != null) {
-            	showScore.setText("Your Failed Final Score: " + score);
+            	showScore.setText(DISPLAYFINALSCORE + score);
             }
             
             
-            Label oldScoreLabel = (Label) root.lookup("#prevHigh");
+            Label oldScoreLabel = (Label) root.lookup(DISPLAYPREVHIGHSCORE);
             
             
-            System.out.println(scoreKeeper.readLastNumberFromFile());
-            System.out.println(score);
+//            System.out.println(scoreKeeper.readLastNumberFromFile(gameName));
+//            System.out.println(score);
             
-            scoreKeeper.checkHighScore(score);
-        	oldScoreLabel.setText("High Score is: " + scoreKeeper.readLastNumberFromFile());
+            scoreKeeper.checkHighScore(score,gameName);
+        	oldScoreLabel.setText(DISPLAYHIGHSCORE + scoreKeeper.readLastNumberFromFile(gameName));
       
             
             
@@ -92,7 +139,7 @@ public class ScreenMaker {
             stage.setScene(scene);
             stage.show();
 
-            Button exitButton = (Button) root.lookup("#exitButton");
+            Button exitButton = (Button) root.lookup(DISPLAYEXITBUTTON);
             exitButton.setOnAction(e -> stage.close());
 
         } catch (Exception e) {
