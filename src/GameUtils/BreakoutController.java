@@ -9,20 +9,12 @@ import javafx.animation.Timeline;
 import GameElemtents.Ball;
 import GameElemtents.Brick;
 import GameElemtents.Paddle;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import GameElemtents.PowerUps;
-import javafx.scene.paint.Paint;
 
 public class BreakoutController {
-    
     public static final int PADDLE_SPEED = 10;
     
     private String gameName = "breakout";
@@ -135,7 +127,6 @@ public class BreakoutController {
     public void step(double elapsedTime) {
 
         //collisions with ball paddle/bricks
-        int scoredPoints = 0;
         CollisionManager.handleBallPaddle(balls, paddles);
         addScore(CollisionManager.handleBallBricks(balls, bricks));
         addScore(CollisionManager.handleBallBricks(balls, unbreakableBricks));
@@ -219,9 +210,14 @@ public class BreakoutController {
             ((PowerUps.ExtraLifePowerUp) pu).applyEffect(this);
         }
         
-//        else if (pu instanceof PowerUps.MultiBallPowerUp) {
-//            // logic to spawn additional balls if implemented
-//        }
+
+    }
+    
+    // personal easter egg (and for testing win game)
+    public void easterEggCheck(Boolean isPressed, String gameName) {
+    	if (isPressed) {
+    		screenMaker.winGame(animation, 999999, scoreLabel, gameName);
+    	}
     }
 
     
@@ -236,6 +232,7 @@ public class BreakoutController {
          paddle.setMoveRight(isMoving);
         }
     }
+    
     
     //level generator
     //to be called once during initialization in createRoot
@@ -304,7 +301,7 @@ public class BreakoutController {
     private void nextLevel() {
         currentLevel++;
         if (currentLevel > levels.size()) {
-            screenMaker.win_game(animation,score, scoreLabel, gameName);
+            screenMaker.winGame(animation,score, scoreLabel, gameName);
             return;
         }
         loadLevel(currentLevel, root);

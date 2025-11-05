@@ -22,6 +22,7 @@ public class GalagaTestController {
     
     public final int LIVES_START = 3;
     
+    
     private List<GalagaPaddle> paddles;
     private List<GalagaBall> balls; 
     private List<EnemyBase> enemies;
@@ -42,6 +43,9 @@ public class GalagaTestController {
     public void setAnimation(Timeline animation) {
         this.animation = animation;
     }
+    
+
+    
 
     // Create game objects and set up the initial scene layout
     public Group createRoot(int windowWidth, int windowHeight) {
@@ -74,6 +78,11 @@ public class GalagaTestController {
         // Create a test formation of different enemy types
         createEnemyFormation();
     }
+    
+    
+    
+    
+    
     
     private void createEnemyFormation() {
         double enemyWidth = 50;
