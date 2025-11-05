@@ -1,5 +1,7 @@
 package GameUtils;
 
+import javafx.scene.Node;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.paint.Color;
 
 public class ColorEditor {
@@ -41,4 +43,50 @@ public class ColorEditor {
 
 		return newColor;
 	}
+
+	/**
+     * Alters the hue of a Node by a given amount in DEGREES (0–360 range).
+	 * assumes no value is greater than 180 and no value is less than -180
+     */
+    public static void alterViewHue(Node view, double hueShiftDegrees) {
+        ColorAdjust adjust = getOrCreateColorAdjust(view);
+		// so JavaFX hue adjustment goes from -1 to 1 where 0 is no change
+		// so we convert degrees to that scale by dividing by 180 and clamping
+    	adjust.setHue(adjust.getHue() + (hueShiftDegrees / 180.0));
+    	view.setEffect(adjust);
+    }
+
+    
+    // Alters the saturation of a Node by a given amount (-1.0 to 1.0).
+    
+    public static void alterViewSaturation(Node view, double saturationShift) {
+        ColorAdjust adjust = getOrCreateColorAdjust(view);
+        adjust.setSaturation(clamp(adjust.getSaturation() + saturationShift, -1, 1));
+        view.setEffect(adjust);
+    }
+
+    // Alters the brightness of a Node by a given amount (-1.0 to 1.0).
+    public static void alterViewBrightness(Node view, double brightnessShift) {
+        ColorAdjust adjust = getOrCreateColorAdjust(view);
+        adjust.setBrightness(clamp(adjust.getBrightness() + brightnessShift, -1, 1));
+        view.setEffect(adjust);
+    }
+
+    // Gets the existing ColorAdjust effect or creates one if missing.
+	// This ensures we don't overwrite existing effects, but add on to them.
+    private static ColorAdjust getOrCreateColorAdjust(Node view) {
+        if (view.getEffect() instanceof ColorAdjust existing) {
+            return existing;
+        }
+        ColorAdjust newAdjust = new ColorAdjust();
+        view.setEffect(newAdjust);
+        return newAdjust;
+    }
+
+	// Clamps a value between a minimum and maximum.
+	// Helper method to ensure values stay within bounds of the JavaFX
+    private static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
 }

@@ -16,8 +16,8 @@ public class EnemyMoving extends EnemyBase {
 	}
 	
 	public EnemyMoving(double x, double y, double width, double height, int hp, Group group) {
-		super(x, y, width, height, hp, group);
-		loadImage(); // Load child's specific image
+		this(x, y, width, height, hp);
+		this.screenItBelongsTo = group;
 	}
 	
 	@Override
