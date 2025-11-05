@@ -1,3 +1,5 @@
+import GameUtils.GameController;
+import GalagaGameUtils.GalagaController;
 import GameUtils.BreakoutController;
 import GameUtils.GameColors;
 import GameUtils.ScreenMaker;
@@ -7,12 +9,13 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-
+import javafx.geometry.Pos;
 
 
 
@@ -33,7 +36,7 @@ public class Startgame extends Application{
 
 	    //game state
 	    private Scene myScene;
-	    private BreakoutController myController;
+	    private GameController myController;
 	    
 	    
 	    
@@ -42,17 +45,19 @@ public class Startgame extends Application{
 	    public void start(Stage stage) {
 	    	   // Create a button
 	        Button startButton = new Button("Start Breakout");
-	        
 	        // Set action to start the game
 	        startButton.setOnAction(e -> startBreakout(stage));
 	        
 	        //un-comment if a startGalaga is added
 	        
-	        // Button startButtonGalaga = new Button("Start Galaga");
-	        // startButtonGalaga.setOnAction(e -> startGalaga(stage))
+	         Button startButtonGalaga = new Button("Start Galaga");
+	         startButtonGalaga.setOnAction(e -> startGalaga(stage));
 	        
 	        // Put the button in a layout
-	        StackPane root = new StackPane(startButton);
+//	        StackPane root = new StackPane(startButton);
+	        VBox root = new VBox(20); // 20 px spacing between buttons
+	        root.getChildren().addAll(startButton, startButtonGalaga);
+	        root.setAlignment(Pos.CENTER);
 	        Scene scene = new Scene(root, screenMaker.SCREENWIDTH, screenMaker.SCREENHEIGHT);
 	        
 	        stage.setScene(scene);
@@ -82,6 +87,45 @@ public class Startgame extends Application{
 	        animation.play();
 	        
 	        myController.setAnimation(animation);
+	    }
+	    
+	    private void startGalaga(Stage stage) {
+	        myController = new GalagaController();
+	        myScene = setupScene(screenMaker.SCREENWIDTH, screenMaker.SCREENHEIGHT, GameColors.BACKGROUND.getColor());
+	        stage.setScene(myScene);
+	        stage.setTitle("Galaga");
+	        stage.show();
+
+	        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+	                e -> myController.step(SECOND_DELAY));
+
+	        Timeline animation = new Timeline();
+	        animation.setCycleCount(Timeline.INDEFINITE);
+	        animation.getKeyFrames().add(frame);
+	        animation.play();
+
+	        myController.setAnimation(animation);
+
+	        //key press for shooting bullets
+	        myScene.setOnKeyPressed(e -> {
+	            KeyCode code = e.getCode();
+	            if (code == KeyCode.SPACE) {
+	                ((GalagaController) myController).fireProjectile();
+	            } else if (code == KeyCode.LEFT) {
+	                myController.setMoveLeft(true);
+	            } else if (code == KeyCode.RIGHT) {
+	                myController.setMoveRight(true);
+	            }
+	        });
+
+	        myScene.setOnKeyReleased(e -> {
+	            KeyCode code = e.getCode();
+	            if (code == KeyCode.LEFT) {
+	                myController.setMoveLeft(false);
+	            } else if (code == KeyCode.RIGHT) {
+	                myController.setMoveRight(false);
+	            }
+	        });
 	    }
 
 	    

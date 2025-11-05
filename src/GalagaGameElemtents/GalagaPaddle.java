@@ -2,6 +2,7 @@ package GalagaGameElemtents;
 
 import GameElemtents.Paddle;
 import javafx.scene.Group;
+import javafx.scene.Node;
 
 public class GalagaPaddle extends Paddle {
 
@@ -16,5 +17,15 @@ public class GalagaPaddle extends Paddle {
 		this(x, y, width, height);
 		this.screenItBelongsTo = group;
 	}
+	
+	public double getWidth() {
+        // Return the width of the visual representation (view)
+        Node viewNode = getView();
+        if (viewNode != null) {
+            return viewNode.getBoundsInParent().getWidth();
+        } else {
+            return 0;
+        }
+    }
 
 }
