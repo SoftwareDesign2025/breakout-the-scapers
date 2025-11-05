@@ -7,10 +7,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 
+
 // This class is in charge of maintaining and updating the high scores from the player when the game ends
 public class ScoreKeeper {
     private final static String FILE_NAME = "Scores.txt";
+    
 
+
+    
     
     // reads the last high score saved inside of the Scores.txt file 
     public int readLastNumberFromFile()  {

@@ -8,7 +8,6 @@ import java.util.List;
 import javafx.animation.Timeline;
 import GameElemtents.Ball;
 import GameElemtents.Brick;
-import GameElemtents.BrickUnbreakable;
 import GameElemtents.Paddle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -20,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import GameElemtents.PowerUps;
+import javafx.scene.paint.Paint;
 
 public class BreakoutController {
     
@@ -41,7 +41,7 @@ public class BreakoutController {
     private Color textColor = GameColors.TEXT_COLOR.getColor(); 
     
     
-    private ScreenMaker screenMaker = new ScreenMaker(800,600);
+    private ScreenMaker screenMaker = new ScreenMaker();
     private double width;
     private double height;
     
@@ -135,6 +135,7 @@ public class BreakoutController {
     public void step(double elapsedTime) {
 
         //collisions with ball paddle/bricks
+        int scoredPoints = 0;
         CollisionManager.handleBallPaddle(balls, paddles);
         addScore(CollisionManager.handleBallBricks(balls, bricks));
         addScore(CollisionManager.handleBallBricks(balls, unbreakableBricks));

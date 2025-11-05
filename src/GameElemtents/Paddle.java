@@ -6,7 +6,6 @@ import javafx.geometry.Bounds;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Window;
 
 //represents the paddle controlled by the player
 //paddle can only move left and right 
@@ -20,15 +19,19 @@ public class Paddle extends GameObject{
 	private double originalWidth; //for level change and powerups
 	
     public Paddle(double x, double y, double width, double height, Paint color) {
-        //makes a visual paddle as a rectangle
-    	view = new Rectangle(x, y, width, height);
+        //makes a visual paddle as a rectangle at origin, positioned via translation
+    	view = new Rectangle(0, 0, width, height);
         ((Rectangle) view).setFill(color);
+        view.setTranslateX(x);
+        view.setTranslateY(y);
         this.originalWidth = width;  // store the starting size
     }
 	public Paddle(double x, double y, double width, double height) {
-		//makes a visual paddle as a rectangle
-		view = new Rectangle(x, y, width, height);
+		//makes a visual paddle as a rectangle at origin, positioned via translation
+		view = new Rectangle(0, 0, width, height);
 		((Rectangle) view).setFill(color);
+		view.setTranslateX(x);
+		view.setTranslateY(y);
 		this.originalWidth = width;  // store the starting size
 	}
 
@@ -46,21 +49,19 @@ public class Paddle extends GameObject{
     }
     
     private void checkOutOfBounds() {
-        Bounds viewBounds = view.localToScreen(view.getBoundsInLocal());
-        Window window = view.getScene().getWindow();
-
-        double windowMinX = window.getX();
-        double windowMaxX = windowMinX + window.getWidth();
-
-        // Check if the view is outside the horizontal window bounds
-        outOfBoundsLeft = viewBounds.getMinX() < windowMinX;
-        outOfBoundsRight = viewBounds.getMaxX() > windowMaxX;
+        // Use getBoundsInParent() for consistency with collision detection
+        Bounds viewBounds = view.getBoundsInParent();
+        // Check if the view is outside the horizontal bounds (assuming screen is 600 wide)
+        // Left bound check
+        outOfBoundsLeft = viewBounds.getMinX() < 0;
+        // Right bound check  
+        outOfBoundsRight = viewBounds.getMaxX() > 600;
     }
 
 
 	private void moveHorizontal(double elapsedTime, int directionalMultiplier) {
-    	// Ensures smooth movement
-    	view.setLayoutX(view.getLayoutX() + ( speed * directionalMultiplier * elapsedTime) ) ;
+    	// Use GameObject's offsetPositionHorizontal method for translation-based movement
+    	offsetPositionHorizontal(speed * directionalMultiplier * elapsedTime);
     }
     
     public void setMoveLeft(boolean value) {
@@ -86,9 +87,10 @@ public class Paddle extends GameObject{
         	// with the angle range we can calculate proportionally how much
         	// the ball is in the paddle
         	Bounds paddleBounds = p.getBoundsInParent();
-        	double ballX = b.getCenterX();
-        	double distanceFromScreenEdge = paddleBounds.getMinX();
-        	double ballRelativeOffsetToPaddle = ballX - distanceFromScreenEdge;
+        	// Use translated center position for accurate bounce angle calculation
+        	double ballX = ball.getX();
+        	double paddleLeft = paddleBounds.getMinX();
+        	double ballRelativeOffsetToPaddle = ballX - paddleLeft;
         	double proportionBallPaddle = ballRelativeOffsetToPaddle / p.getWidth();
         	// we want this to be a proportion so we need to keep it between 0 and 1 to make sure the
         	// minimum and max angles are respected
@@ -99,8 +101,10 @@ public class Paddle extends GameObject{
         	bounceAngle =  (angleRange * proportionBallPaddle) + minAngle;
 
             // Move the ball just above the paddle to avoid re-collision
-            double newY = p.getY() - b.getRadius(); // 1 pixel gap for safety
-            b.setCenterY(newY);
+            // Use paddle's getY() which now accounts for translations
+            double newY = this.getY() - b.getRadius(); // 1 pixel gap for safety
+            // Since Circle is at (0,0) and we use translateX/Y, just set translateY directly
+            ball.getView().setTranslateY(newY);
             // Set new bounce direction to be up by adding 180. because
             // up to this point we were going under the assumption +y is up but its down
             // so we add 180 to ofsset that
@@ -116,7 +120,8 @@ public class Paddle extends GameObject{
 	    double newWidth = oldWidth * 2;  // doubles the width
 
 	    // Center the paddle by shifting it left half of the growth amount
-	    rect.setX(rect.getX() - (newWidth - oldWidth) / 2);
+	    // Since Rectangle is at (0,0), we use translations to shift it
+	    offsetPositionHorizontal(-(newWidth - oldWidth) / 2);
 	    rect.setWidth(newWidth);
 		
 	}

@@ -71,13 +71,15 @@ public class Brick extends GameObject{
     // it is already moving away from it so we dont want to reverse the velocity in that case
     private void bounceBall(Ball ball) {
         ball.accelerate(10f); // speed up the ball slightly on each hit to make it harder and avoid softblocks
-        Circle ballView = (Circle) ball.getView();
         Bounds brickBounds = this.getView().getBoundsInParent();
 
-        double ballLeft = ballView.getCenterX() - ballView.getRadius();
-        double ballRight = ballView.getCenterX() + ballView.getRadius();
-        double ballTop = ballView.getCenterY() - ballView.getRadius();
-        double ballBottom = ballView.getCenterY() + ballView.getRadius();
+        // Use translated center position for accurate collision calculations
+        double ballCenterX = ball.getX();
+        double ballCenterY = ball.getY();
+        double ballLeft = ballCenterX - ball.getRadius();
+        double ballRight = ballCenterX + ball.getRadius();
+        double ballTop = ballCenterY - ball.getRadius();
+        double ballBottom = ballCenterY + ball.getRadius();
 
         double brickLeft = brickBounds.getMinX();
         double brickRight = brickBounds.getMaxX();
