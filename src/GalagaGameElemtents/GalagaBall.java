@@ -11,7 +11,7 @@ public class GalagaBall extends Ball {
 	
 	public GalagaBall(double x, double y) {
 		super(x, y);
-		loadImage();
+		loadImage("src\\Pictures\\BallPixelArt.png");
 		this.updateSpeed(800);
 	}
 	
