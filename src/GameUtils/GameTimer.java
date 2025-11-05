@@ -1,7 +1,5 @@
 package GameUtils;
 
-import GameElemtents.Paddle;
-import GameElemtents.PowerUps;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
@@ -37,7 +35,7 @@ public class GameTimer {
         timer.setOnFinished(event -> onExpire.run());
         timer.play();
     }
-    
+    // example on how to use 
     //GameTimer timer = new GameTimer();
 //    timer.runForDuration(
 //    	    () -> paddle.expand(),       // what to do now

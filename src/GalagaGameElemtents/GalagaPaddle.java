@@ -8,8 +8,7 @@ public class GalagaPaddle extends Paddle {
 
 	public GalagaPaddle(double x, double y, double width, double height) {
 		super(x, y, width, height);
-		imagePath = "/breakout-the-scapers/src/Pictures/SpaceShips/Ship_1.png";
-		loadImage();
+		loadImage("src\\Pictures\\SpaceShips\\Ship_1.png");
 		this.speed = 200;
 		
 	}

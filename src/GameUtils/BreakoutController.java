@@ -34,7 +34,6 @@ public class BreakoutController extends GameController{
 	public void step(double elapsedTime) {
 
         //collisions with ball paddle/bricks
-        int scoredPoints = 0;
         CollisionManager.handleBallPaddle(balls, paddles);
         addScore(CollisionManager.handleBallBricks(balls, bricks));
         addScore(CollisionManager.handleBallBricks(balls, unbreakableBricks));
@@ -121,9 +120,14 @@ public class BreakoutController extends GameController{
             ((PowerUps.ExtraLifePowerUp) pu).applyEffect(this);
         }
         
-//        else if (pu instanceof PowerUps.MultiBallPowerUp) {
-//            // logic to spawn additional balls if implemented
-//        }
+
+    }
+    
+    // personal easter egg (and for testing win game)
+    public void easterEggCheck(Boolean isPressed, String gameName) {
+    	if (isPressed) {
+    		screenMaker.winGame(animation, 999999, scoreLabel, gameName);
+    	}
     }
 	
 	//reset ball to the center of the screen
