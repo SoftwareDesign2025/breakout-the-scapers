@@ -6,7 +6,7 @@ import java.util.List;
 
 public class GalagaCollissionManager {
 	
-	public static void handleBallPaddle(List<Ball> balls, List<Paddle> paddles) {
+	public static void handleBallPaddle(List<GalagaBall> balls, List<GalagaPaddle> paddles) {
         
     }
 
@@ -47,12 +47,11 @@ public class GalagaCollissionManager {
                     break;
                 }
             }
-            
         }
         return score;
     }
     
-    public static void handleBallBall(List<Ball> balls) {
+    public static void handleBallBall(List<GalagaBall> balls) {
        
     }
 }

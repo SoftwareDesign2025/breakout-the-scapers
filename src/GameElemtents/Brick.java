@@ -22,9 +22,9 @@ public class Brick extends GameObject{
         this.hp = hp;
         this.points = 150; 
         //makes a rectangle to visually represent the brick
-        view = new Rectangle(width, height, color);
-        this.setPositionX(x);
-        this.setPositionY(y);
+        view = new Rectangle(x, y, width, height);
+        setBrickColor(this.color);
+        
         // if the odds are right make it
         if (Math.random() < CHANCE_FOR_POWERUP) {
         	this.powerUpBrick = true;
@@ -35,18 +35,30 @@ public class Brick extends GameObject{
     @Override
     public void update(double elapsedTime) {}
 
-    // returns true if the brick is destroyed default 1 damage
+    // returns true if the brick is destroyed
     public boolean onHit() {
-        return onHit(1);
+        hp--;
+        
+        color = ColorEditor.alterColorHue(15.0f, color);
+        setBrickColor(color);
+        this.isBreakDead = hp <= 0;
+        return isBreakDead;
     }
     
     // applies damage to the brick and returns true if destroyed
     public boolean onHit(int damage) {
         hp -= damage;
         
-        ColorEditor.alterViewHue(view, 15);
+        color = ColorEditor.alterColorHue(15.0f, color);
+        setBrickColor(color);
         this.isBreakDead = hp <= 0;
         return isBreakDead;
+    }
+
+    // assumes the brick is a rectangle
+    // sets the color of the brick
+    protected void setBrickColor(Color newColor) {
+        ((Rectangle) view).setFill(newColor);
     }
    
     
