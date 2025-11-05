@@ -184,14 +184,16 @@ public class BreakoutController {
         
         
     }
-
-    public void addScore(int points) {
-        score += points;
-    }
-
-    //reset ball to the center of the screen
-    public void resetBall(Ball ball) {
-        ball.reset(width / 2, height / 2);
+	
+	//called when all bricks are cleared to progress to next level.
+	@Override
+    protected void nextLevel() {
+        currentLevel++;
+        if (currentLevel > levels.size()) {
+            screenMaker.winGame(animation, score, scoreLabel, "Breakout");
+            return;
+        }
+        loadLevel(currentLevel, root);
     }
     
   //apply the effect of a collected power-up
@@ -214,6 +216,7 @@ public class BreakoutController {
     }
     
     // personal easter egg (and for testing win game)
+	@Override
     public void easterEggCheck(Boolean isPressed, String gameName) {
     	if (isPressed) {
     		screenMaker.winGame(animation, 999999, scoreLabel, gameName);

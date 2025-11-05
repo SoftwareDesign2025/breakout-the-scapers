@@ -11,14 +11,14 @@ public class GalagaBall extends Ball {
 	
 	public GalagaBall(double x, double y) {
 		super(x, y);
-		loadImage();
-		this.updateSpeed(800);
+		loadImage("src\\Pictures\\BallPixelArt.png");
+		velocity = new Point2D(0, -400);
 	}
 	
 	public GalagaBall(double x, double y, Group group) {
 		this(x, y);
 		this.screenItBelongsTo = group;
-		loadImage();
+		loadImage("src\\Pictures\\BallPixelArt.png");
 		velocity = new Point2D(0, -400);
 	}
 	
