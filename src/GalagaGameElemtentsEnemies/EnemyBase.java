@@ -26,22 +26,4 @@ public class EnemyBase extends Brick {
 		fallDown();
 	}
 
-	public void takeDamage(int dmg) {
-        hp -= dmg;
-        if (hp < 0) hp = 0;
-    }
-	
-	public double getX(){ 
-		return view.getLayoutX();
-	}
-	public double getY(){
-		return view.getLayoutY();
-	}
-	
-	public double getWidth(){
-		return view.getBoundsInLocal().getWidth();
-	}
-	public double getHeight(){
-		return view.getBoundsInLocal().getHeight();
-	}
 }
