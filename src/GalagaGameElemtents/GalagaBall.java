@@ -1,5 +1,5 @@
 package GalagaGameElemtents;
-// Author: Jose Andres Besednjak Izquierdo
+// Author: Jose Andres Besednjak Izquierdo 
 import GameElemtents.Ball;
 import javafx.scene.Group;
 

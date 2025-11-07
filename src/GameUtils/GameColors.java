@@ -3,7 +3,7 @@ package GameUtils;
 ///This class purpose is to give colors to the in game items. Ideally we could just change them 
 /// all from here. and we could have like different color schemes. maybe even light and darkmode
 /// I have linked the documentation about JavaFx colors and the website I like to use for
-/// Colors when I dont know what to pick
+/// Colors when I dont know what to pick 
 import javafx.scene.paint.Color;
 // https://colorhunt.co/palette/0046ff73c8d2f5f1dcff9013
 // https://docs.oracle.com/javase/8/javafx/api/javafx/scene/paint/Color.html

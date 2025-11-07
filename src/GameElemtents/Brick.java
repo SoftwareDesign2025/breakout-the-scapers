@@ -1,7 +1,7 @@
 package GameElemtents;
 
 
-// Author: Jose Andres Besednjak Izquierdo
+// Author: Jose Andres Besednjak Izquierdo 
 import GameUtils.ColorEditor;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;

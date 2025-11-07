@@ -10,7 +10,7 @@ public class GalagaCollissionManager {
         
     }
 
-    // returns the total points scored
+    // returns the total points scored 
     // For Galaga balls: applies damage and removes ball immediately on hit
     public static int handleBallBricks(List<GalagaBall> balls, List<EnemyBase> enemies) {
         int score = 0;

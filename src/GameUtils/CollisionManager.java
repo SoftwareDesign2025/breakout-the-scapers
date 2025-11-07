@@ -1,5 +1,5 @@
 package GameUtils;
-// Author: Jose Andres Besednjak Izquierdo
+// Author: Jose Andres Besednjak Izquierdo 
 import java.util.Iterator;
 import java.util.List;
 
@@ -7,7 +7,7 @@ import GameElemtents.Ball;
 import GameElemtents.Brick;
 import GameElemtents.Paddle;
 
-//keeps the physics and scoring logic separate from the controller
+//keeps the physics and scoring logic separate from the controller 
 public class CollisionManager { 
 	
 	//checks if the ball hits the paddle, and makes it bounce upward proportionally on how much

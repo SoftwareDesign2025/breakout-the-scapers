@@ -18,7 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class GalagaTestController {
-    
+     
     public final int LIVES_START = 3;
     
     private List<GalagaPaddle> paddles;

@@ -2,7 +2,7 @@ package GalagaGameElemtentsEnemies;
 
 import GameElemtents.Brick;
 import javafx.scene.Group;
-// Author: Jose Andres Besednjak Izquierdo
+// Author: Jose Andres Besednjak Izquierdo 
 public class EnemyBase extends Brick {
 
 	protected float fallSpeed = .25f;

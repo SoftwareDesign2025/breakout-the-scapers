@@ -1,5 +1,5 @@
 package GalagaGameElemtentsEnemies;
-// Author: Jose Andres Besednjak Izquierdo
+// Author: Jose Andres Besednjak Izquierdo 
 import javafx.scene.Group;
 
 public class EnemyTank extends EnemyBase {

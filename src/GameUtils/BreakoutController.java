@@ -113,7 +113,7 @@ public class BreakoutController {
         }
         for (Ball b : balls) {
             root.getChildren().add(b.getView());
-        }
+        } 
         
     }
     
