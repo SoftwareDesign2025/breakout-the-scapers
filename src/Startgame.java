@@ -8,7 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -41,7 +40,7 @@ public class Startgame extends Application{
 
 	    //game state
 	    private Scene myScene;
-	    private GameController myController;
+	    private BreakoutController myController;
 	    private String gameName = "breakout";
 	    
 	    
@@ -52,8 +51,7 @@ public class Startgame extends Application{
 	        Button startButtonGalaga = new Button("Start Galaga");
 
 	        startButton.setOnAction(e -> startBreakout(stage));
-//	        startButtonGalaga.setOnAction(e -> galagaTest.startGalagaTest(stage));
-	        startButtonGalaga.setOnAction(e -> startGalaga(stage));
+	        startButtonGalaga.setOnAction(e -> galagaTest.startGalagaTest(stage));
 
 	        // VBox arranges buttons vertically with spacing
 	        VBox root = new VBox(20, startButton, startButtonGalaga);
