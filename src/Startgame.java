@@ -4,10 +4,11 @@ import GameUtils.ScreenMaker;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -19,9 +20,15 @@ import javafx.util.Duration;
 // this was once a part of main but moved out and does the setup for our games
 public class Startgame extends Application{
 	//for animations and window
+		
+		private final boolean KEYISPRESSED = true;
 	
+		
 		private ScreenMaker screenMaker = new ScreenMaker();
-
+		
+		private MainGalagaTest galagaTest = new MainGalagaTest();
+		
+		
 		public  final int FRAMES_PER_SECOND = 60;
 		public  final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
 		public  final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -34,29 +41,25 @@ public class Startgame extends Application{
 	    //game state
 	    private Scene myScene;
 	    private BreakoutController myController;
+	    private String gameName = "breakout";
 	    
 	    
-	    
-	    // start menu for our users (PLEASE NOTE: I need logic for starting Galaga so I can a button for it)
+	    // START menu for our users ( that leads into our other games)
 	    @Override
 	    public void start(Stage stage) {
-	    	   // Create a button
 	        Button startButton = new Button("Start Breakout");
-	        
-	        // Set action to start the game
+	        Button startButtonGalaga = new Button("Start Galaga");
+
 	        startButton.setOnAction(e -> startBreakout(stage));
-	        
-	        //un-comment if a startGalaga is added
-	        
-	        // Button startButtonGalaga = new Button("Start Galaga");
-	        // startButtonGalaga.setOnAction(e -> startGalaga(stage))
-	        
-	        // Put the button in a layout
-	        StackPane root = new StackPane(startButton);
+	        startButtonGalaga.setOnAction(e -> galagaTest.startGalagaTest(stage));
+
+	        // VBox arranges buttons vertically with spacing
+	        VBox root = new VBox(20, startButton, startButtonGalaga);
+	        root.setAlignment(Pos.CENTER);
+
 	        Scene scene = new Scene(root, screenMaker.SCREENWIDTH, screenMaker.SCREENHEIGHT);
-	        
 	        stage.setScene(scene);
-	        stage.setTitle("Breakout Launcher");
+	        stage.setTitle("Game Launcher");
 	        stage.show();
 	    }
 	    
@@ -94,8 +97,9 @@ public class Startgame extends Application{
 	        // key press sets movement flags to true
 	        scene.setOnKeyPressed(e -> {
 	            switch (e.getCode()) {
-	                case LEFT -> myController.setMoveLeft(true);
-	                case RIGHT -> myController.setMoveRight(true);
+	                case LEFT -> myController.setMoveLeft(KEYISPRESSED);
+	                case RIGHT -> myController.setMoveRight(KEYISPRESSED);
+	                case Q -> myController.easterEggCheck(KEYISPRESSED, gameName);
 	                default -> {} // ignore other keys
 	            }
 	        });
@@ -103,8 +107,8 @@ public class Startgame extends Application{
 	        // key release sets movement flags to false
 	        scene.setOnKeyReleased(e -> {
 	            switch (e.getCode()) {
-	                case LEFT -> myController.setMoveLeft(false);
-	                case RIGHT -> myController.setMoveRight(false);
+	                case LEFT -> myController.setMoveLeft(!KEYISPRESSED);
+	                case RIGHT -> myController.setMoveRight(!KEYISPRESSED);
 	                default -> {}
 	            }
 	        });
